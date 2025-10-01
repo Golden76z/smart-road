@@ -1,15 +1,11 @@
+use sdl2::pixels::Color;
 use std::time::Duration;
 
+use crate::config::{FPS, SCREEN_HEIGHT, SCREEN_WIDTH};
+
 mod config;
-mod input;
 mod render;
 mod simulation;
-
-use crate::{
-    config::{CANVA_HEIGHT, CANVA_WIDTH},
-    render::Renderer,
-};
-use input::input_listener;
 
 pub fn main() {
     println!("<---- Road intersection start ---->");
@@ -18,18 +14,23 @@ pub fn main() {
     let video_subsystem = sdl_context.video().unwrap();
 
     let window = video_subsystem
-        .window("road_intersection", 1000, 1000)
+        .window("smart_road", SCREEN_WIDTH, SCREEN_HEIGHT)
         .position_centered()
         .build()
         .unwrap();
 
+    // Test window
+    let mut canvas = window.into_canvas().build().unwrap();
+    canvas.set_draw_color(Color::RGB(0, 255, 255));
+
     // Creating the new renderer - To print on the screen
-    let mut renderer = Renderer::new(window).unwrap();
+    // let mut renderer = Renderer::new(window).unwrap();
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
     'running: loop {
-        renderer.canvas.clear();
+        // renderer.canvas.clear();
+        canvas.clear();
 
         // Input listener - Vehicle spawning
         for event in event_pump.poll_iter() {
@@ -37,9 +38,11 @@ pub fn main() {
         }
 
         // Render the drawn picture to the screen
-        renderer.canvas.present();
+        // renderer.canvas.present();
+        canvas.present();
 
         // Time between each loops - Frame rate
-        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
+        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / FPS));
     }
 }
+
