@@ -1,0 +1,13 @@
+[package]
+name = "smart_road"
+version = "0.1.0"
+edition = "2025"
+authors = ["Damien <damienprouet76@gmail.com>"]
+
+[dependencies]
+sdl2 = "0.37"
+rand = "0.8"
+
+[profile.release]
+opt-level = 3
+lto = true
