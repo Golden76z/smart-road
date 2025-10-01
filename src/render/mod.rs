@@ -1,9 +1,9 @@
 // Exporting all the modules
-pub mod renderer;
 pub mod map;
 pub mod panel;
+pub mod renderer;
 
 // Exporting all the structs
-pub use renderer::Renderer;
 pub use map::*;
 pub use panel::*;
+
