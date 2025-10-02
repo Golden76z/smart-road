@@ -7,6 +7,13 @@ pub const PAUSE: bool = false;
 pub const SPAWN_OFFSET_X: u32 = SCREEN_WIDTH / 10;
 pub const SPAWN_OFFSET_Y: u32 = SCREEN_HEIGHT / 10;
 
+// Debug panel
+#[derive(Clone)]
+pub struct UiState {
+    pub show_keybinds_panel: bool,
+    pub show_debug_panel: bool,
+}
+
 // <================================ Grid settings ================================>
 
 pub const TILE_WIDTH: u32 = SCREEN_WIDTH / 20;
