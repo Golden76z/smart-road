@@ -1,7 +1,7 @@
-use sdl2::pixels::Color;
-use sdl2::{image::LoadTexture, rect::Rect};
 use std::time::Duration;
 
+use crate::config::{Direction, SPAWN_BOTTOM_WEST, TrafficLanes};
+use crate::simulation::Vehicle;
 use crate::{
     config::{FPS, UiState},
     render::renderer::Renderer,
@@ -15,19 +15,22 @@ mod simulation;
 pub fn main() -> Result<(), String> {
     println!("<---- Road intersection start ---->");
 
+    // Setting up the Debug/Keybinds/Statistics panels states
     let mut ui = UiState {
         show_keybinds_panel: true,
         show_debug_panel: false,
     };
 
+    // Initializing the structs needed
     let sdl_context = sdl2::init().unwrap();
     let mut render = Renderer::new(&sdl_context).expect("Failed to create a canvas");
+    let _lanes = TrafficLanes::new();
 
-    render.canvas.set_draw_color(Color::RGB(0, 255, 255));
+    // render.canvas.set_draw_color(Color::RGB(0, 255, 255));
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
-    'running: loop {
+    '_running: loop {
         // renderer.canvas.clear();
         render.canvas.clear();
 
@@ -36,11 +39,12 @@ pub fn main() -> Result<(), String> {
             match input_listener(event, &mut ui) {
                 Ok(()) => {}
                 Err(msg) => {
-                    println!("{}", msg);
-                    return Err("Error".to_string());
+                    return Err(msg);
                 }
             }
         }
+
+        Vehicle::new(config::Lane::Up, Direction::West);
 
         // Drawing the map textures
         render.create_map();
