@@ -1,12 +1,6 @@
-use sdl2::{image::LoadTexture, rect::Rect};
+use sdl2::{image::LoadTexture, rect::Point, rect::Rect, render::Texture};
 
 use crate::render::renderer::Renderer;
-
-use sdl2::rect::Point;
-use sdl2::render::BlendMode;
-use sdl2::render::Texture;
-
-// Example: draw rotated texture
 
 impl Renderer {
     fn draw_rotated(
@@ -18,21 +12,22 @@ impl Renderer {
         h: u32,
         angle: f64,
     ) -> Result<(), String> {
-        // Where on screen you want it
+        // Rect with the positions and dimensions
         let dst = Rect::new(x, y, w, h);
 
-        // Center of rotation: middle of the rect (can be anywhere!)
+        // Center of rotation: middle of the rect
         let center = Point::new((w / 2) as i32, (h / 2) as i32);
 
         // Copy with rotation
         self.canvas.copy_ex(
             texture,
-            None,      // source rect (None = whole texture)
-            Some(dst), // destination rect
-            angle,     // angle in degrees
-            center,    // rotation center
-            false,     // flip horizontal
-            false,     // flip vertical
+            // source rect (None = whole texture)
+            None,
+            Some(dst),
+            angle,
+            center,
+            false,
+            false,
         )
     }
 
@@ -40,6 +35,7 @@ impl Renderer {
         // Load a PNG into a surface, then into a texture
         let texture_creator = self.canvas.texture_creator();
 
+        // Loading the textures
         let lane_vertical = texture_creator
             .load_texture("../../assets/lane_vertical.png")
             .unwrap();
@@ -63,15 +59,21 @@ impl Renderer {
 
         // Drawing the 4 lanes of the map
         {
-            let _ = self.draw_rotated(&lane_vertical, 350, 0, 300, 350, 180.0);
-            let _ = self.draw_rotated(&lane_vertical, 350, 650, 300, 350, 0.0);
+            // Drawing top and bottom lanes
+            self.draw_rotated(&lane_vertical, 350, 0, 300, 350, 180.0)
+                .expect("[map.rs]: Error drawing top lane");
+            self.draw_rotated(&lane_vertical, 350, 650, 300, 350, 0.0)
+                .expect("[map.rs]: Error drawing bottom lane");
 
-            let _ = self.draw_rotated(&lane_horizontal, 0, 350, 350, 300, 0.0);
-            let _ = self.draw_rotated(&lane_horizontal, 650, 350, 350, 300, 180.0);
+            // Drawing left and right lanes
+            self.draw_rotated(&lane_horizontal, 0, 350, 350, 300, 0.0)
+                .expect("[map.rs]: Error drawing left lane");
+            self.draw_rotated(&lane_horizontal, 650, 350, 350, 300, 180.0)
+                .expect("[map.rs]: Error drawing right lane");
         }
 
-        // Drawing the center of the map
         {
+            // Drawing the center of the map
             let _ = self.draw_rotated(&center, 350, 350, 300, 300, 0.0);
         }
     }
