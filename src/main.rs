@@ -1,12 +1,8 @@
 use std::time::Duration;
 
-use crate::config::{Direction, SPAWN_BOTTOM_WEST, TrafficLanes};
-use crate::simulation::Vehicle;
-use crate::{
-    config::{FPS, UiState},
-    render::renderer::Renderer,
-    simulation::input::input_listener,
-};
+use crate::config::{GameSettings, TrafficLanes};
+// use crate::simulation::Vehicle;
+use crate::{config::FPS, render::renderer::Renderer};
 
 mod config;
 mod render;
@@ -15,11 +11,8 @@ mod simulation;
 pub fn main() -> Result<(), String> {
     println!("<---- Road intersection start ---->");
 
-    // Setting up the Debug/Keybinds/Statistics panels states
-    let mut ui = UiState {
-        show_keybinds_panel: true,
-        show_debug_panel: false,
-    };
+    // Initializing the main config settings struct
+    let mut game_config = GameSettings::new();
 
     // Initializing the structs needed
     let sdl_context = sdl2::init().unwrap();
@@ -36,7 +29,7 @@ pub fn main() -> Result<(), String> {
 
         // Input listener - Vehicle spawning
         for event in event_pump.poll_iter() {
-            match input_listener(event, &mut ui) {
+            match game_config.input_listener(event) {
                 Ok(()) => {}
                 Err(msg) => {
                     return Err(msg);
@@ -44,7 +37,7 @@ pub fn main() -> Result<(), String> {
             }
         }
 
-        Vehicle::new(config::Lane::Up, Direction::West);
+        // Vehicle::new(config::Lane::Up, Direction::West);
 
         // Drawing the map textures
         render.create_map();

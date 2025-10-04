@@ -7,13 +7,6 @@ pub const PAUSE: bool = false;
 pub const SPAWN_OFFSET_X: u32 = SCREEN_WIDTH / 10;
 pub const SPAWN_OFFSET_Y: u32 = SCREEN_HEIGHT / 10;
 
-// Debug panel
-#[derive(Clone)]
-pub struct UiState {
-    pub show_keybinds_panel: bool,
-    pub show_debug_panel: bool,
-}
-
 // <================================ Grid settings ================================>
 
 pub const TILE_WIDTH: u32 = SCREEN_WIDTH / 20;
@@ -29,6 +22,9 @@ pub const SAFE_DISTANCE: u32 = 2 * VEHICLE_WIDTH;
 pub const VELOCITY_SLOW: u32 = 20;
 pub const VELOCITY_NORMAL: u32 = 35;
 pub const VELOCITY_FAST: u32 = 50;
+
+// Spawn cooldown
+pub const SPAWN_COOLDOWN: u64 = 1000;
 
 // <=============================== Spawn positions ===============================>
 
