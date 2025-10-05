@@ -37,8 +37,6 @@ pub fn main() -> Result<(), String> {
             }
         }
 
-        // Vehicle::new(config::Lane::Up, Direction::West);
-
         // Drawing the map textures
         render.create_map();
 
