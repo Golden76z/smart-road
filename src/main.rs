@@ -12,11 +12,10 @@ pub fn main() -> Result<(), String> {
     println!("<---- Road intersection start ---->");
 
     // Initializing the main config settings struct
-    let mut game_config = GameSettings::new();
+    let sdl_context = sdl2::init().unwrap();
+    let mut game_config = GameSettings::new(&sdl_context);
 
     // Initializing the structs needed
-    let sdl_context = sdl2::init().unwrap();
-    let mut render = Renderer::new(&sdl_context).expect("Failed to create a canvas");
     let _lanes = TrafficLanes::new();
 
     // render.canvas.set_draw_color(Color::RGB(0, 255, 255));
@@ -25,7 +24,7 @@ pub fn main() -> Result<(), String> {
 
     '_running: loop {
         // renderer.canvas.clear();
-        render.canvas.clear();
+        game_config.render.canvas.clear();
 
         // Input listener - Vehicle spawning
         for event in event_pump.poll_iter() {
@@ -38,10 +37,11 @@ pub fn main() -> Result<(), String> {
         }
 
         // Drawing the map textures
-        render.create_map();
+        game_config.render.create_map();
+        game_config.render.create_overlay(&mut game_config.ui_state);
 
         // Render the drawn picture to the screen
-        render.canvas.present();
+        game_config.render.canvas.present();
 
         // Time between each loops - Frame rate
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / FPS));

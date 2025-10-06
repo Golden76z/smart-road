@@ -18,6 +18,7 @@ impl GameSettings {
                 sdl2::keyboard::Keycode::Escape => {
                     return Err("Program stopped".to_string());
                 }
+
                 // Toggle the keybinds panel (ON by default)
                 sdl2::keyboard::Keycode::I => {
                     self.ui_state.toggle_keybinds();

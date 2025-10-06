@@ -1,6 +1,6 @@
 // <=============================== Screen settings ===============================>
 
-pub const SCREEN_WIDTH: u32 = 1000;
+pub const SCREEN_WIDTH: u32 = 1400;
 pub const SCREEN_HEIGHT: u32 = 1000;
 pub const FPS: u32 = 60;
 pub const PAUSE: bool = false;

@@ -1,7 +1,7 @@
 pub struct UiState {
-    keybinds_panel: bool,
-    statistic_panel: bool,
-    debug_panel: bool,
+    pub keybinds_panel: bool,
+    pub statistic_panel: bool,
+    pub debug_panel: bool,
 }
 
 impl UiState {
