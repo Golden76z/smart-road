@@ -3,6 +3,7 @@ use crate::config::{
     SPAWN_LEFT_FORWARD, SPAWN_LEFT_WEST, SPAWN_RIGHT_EAST, SPAWN_RIGHT_FORWARD, SPAWN_RIGHT_WEST,
     SPAWN_UP_EAST, SPAWN_UP_FORWARD, SPAWN_UP_WEST,
 };
+use rand::prelude::*;
 
 pub struct Vehicle {
     pub spawn: (f32, f32),
@@ -42,5 +43,16 @@ impl Vehicle {
             lane: lane,
             direction: direction,
         }
+    }
+
+    pub fn spawn_random(lane: Lane) {
+        let mut rng = rand::rng();
+        let rand_num = rng.random_range(0..3);
+        match rand_num {
+            0 => Vehicle::new(lane, Direction::West),
+            1 => Vehicle::new(lane, Direction::Forward),
+            2 => Vehicle::new(lane, Direction::East),
+            _ => unreachable!(),
+        };
     }
 }

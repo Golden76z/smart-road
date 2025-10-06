@@ -1,5 +1,5 @@
 use crate::{
-    config::{Direction, GameSettings, Lane},
+    config::{GameSettings, Lane},
     simulation::Vehicle,
 };
 use rand::prelude::*;
@@ -36,83 +36,35 @@ impl GameSettings {
                 }
 
                 sdl2::keyboard::Keycode::Up => {
-                    let rand_num = rng.random_range(0..3);
-                    match rand_num {
-                        0 => Vehicle::new(Lane::Up, Direction::West),
-                        1 => Vehicle::new(Lane::Up, Direction::Forward),
-                        2 => Vehicle::new(Lane::Up, Direction::East),
-                        _ => unreachable!(),
-                    };
+                    Vehicle::spawn_random(Lane::Up);
                     Ok(())
                 }
                 sdl2::keyboard::Keycode::Down => {
-                    let rand_num = rng.random_range(0..3);
-                    match rand_num {
-                        0 => Vehicle::new(Lane::Bottom, Direction::West),
-                        1 => Vehicle::new(Lane::Bottom, Direction::Forward),
-                        2 => Vehicle::new(Lane::Bottom, Direction::East),
-                        _ => unreachable!(),
-                    };
+                    Vehicle::spawn_random(Lane::Bottom);
                     Ok(())
                 }
                 sdl2::keyboard::Keycode::Left => {
-                    let rand_num = rng.random_range(0..3);
-                    match rand_num {
-                        0 => Vehicle::new(Lane::Left, Direction::West),
-                        1 => Vehicle::new(Lane::Left, Direction::Forward),
-                        2 => Vehicle::new(Lane::Left, Direction::East),
-                        _ => unreachable!(),
-                    };
+                    Vehicle::spawn_random(Lane::Left);
                     Ok(())
                 }
                 sdl2::keyboard::Keycode::Right => {
-                    let rand_num = rng.random_range(0..3);
-                    match rand_num {
-                        0 => Vehicle::new(Lane::Right, Direction::West),
-                        1 => Vehicle::new(Lane::Right, Direction::Forward),
-                        2 => Vehicle::new(Lane::Right, Direction::East),
-                        _ => unreachable!(),
-                    };
+                    Vehicle::spawn_random(Lane::Right);
                     Ok(())
                 }
                 sdl2::keyboard::Keycode::R => {
                     let rand_lane = rng.random_range(0..4);
                     match rand_lane {
                         0 => {
-                            let rand_direction = rng.random_range(0..3);
-                            match rand_direction {
-                                0 => Vehicle::new(Lane::Up, Direction::West),
-                                1 => Vehicle::new(Lane::Up, Direction::Forward),
-                                2 => Vehicle::new(Lane::Up, Direction::East),
-                                _ => unreachable!(),
-                            };
+                            Vehicle::spawn_random(Lane::Up);
                         }
                         1 => {
-                            let rand_direction = rng.random_range(0..3);
-                            match rand_direction {
-                                0 => Vehicle::new(Lane::Bottom, Direction::West),
-                                1 => Vehicle::new(Lane::Bottom, Direction::Forward),
-                                2 => Vehicle::new(Lane::Bottom, Direction::East),
-                                _ => unreachable!(),
-                            };
+                            Vehicle::spawn_random(Lane::Bottom);
                         }
                         2 => {
-                            let rand_direction = rng.random_range(0..3);
-                            match rand_direction {
-                                0 => Vehicle::new(Lane::Left, Direction::West),
-                                1 => Vehicle::new(Lane::Left, Direction::Forward),
-                                2 => Vehicle::new(Lane::Left, Direction::East),
-                                _ => unreachable!(),
-                            };
+                            Vehicle::spawn_random(Lane::Left);
                         }
                         3 => {
-                            let rand_direction = rng.random_range(0..3);
-                            match rand_direction {
-                                0 => Vehicle::new(Lane::Right, Direction::West),
-                                1 => Vehicle::new(Lane::Right, Direction::Forward),
-                                2 => Vehicle::new(Lane::Right, Direction::East),
-                                _ => unreachable!(),
-                            };
+                            Vehicle::spawn_random(Lane::Right);
                         }
                         _ => unreachable!(),
                     };
