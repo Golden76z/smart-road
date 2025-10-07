@@ -1,7 +1,7 @@
 use crate::config::{
-    Direction, Lane, SPAWN_BOTTOM_EAST, SPAWN_BOTTOM_FORWARD, SPAWN_BOTTOM_WEST, SPAWN_LEFT_EAST,
-    SPAWN_LEFT_FORWARD, SPAWN_LEFT_WEST, SPAWN_RIGHT_EAST, SPAWN_RIGHT_FORWARD, SPAWN_RIGHT_WEST,
-    SPAWN_UP_EAST, SPAWN_UP_FORWARD, SPAWN_UP_WEST,
+    Broadcaster, Direction, Lane, MessageType, SPAWN_BOTTOM_EAST, SPAWN_BOTTOM_FORWARD,
+    SPAWN_BOTTOM_WEST, SPAWN_LEFT_EAST, SPAWN_LEFT_FORWARD, SPAWN_LEFT_WEST, SPAWN_RIGHT_EAST,
+    SPAWN_RIGHT_FORWARD, SPAWN_RIGHT_WEST, SPAWN_UP_EAST, SPAWN_UP_FORWARD, SPAWN_UP_WEST,
 };
 use rand::prelude::*;
 
@@ -12,7 +12,7 @@ pub struct Vehicle {
 }
 
 impl Vehicle {
-    pub fn new(lane: Lane, direction: Direction) -> Self {
+    pub fn new(lane: Lane, direction: Direction, broadcast: &mut Broadcaster) -> Self {
         let position: (f32, f32);
 
         match lane {
@@ -38,6 +38,9 @@ impl Vehicle {
             },
         }
 
+        let msg = format!("Spawn Vehicle on Lane: {:?} Going: {:?}", lane, direction);
+        broadcast.log(&msg, MessageType::Info);
+
         Vehicle {
             spawn: position,
             lane: lane,
@@ -45,13 +48,13 @@ impl Vehicle {
         }
     }
 
-    pub fn spawn_random(lane: Lane) {
+    pub fn spawn_random(lane: Lane, broadcaster: &mut Broadcaster) {
         let mut rng = rand::rng();
         let rand_num = rng.random_range(0..3);
         match rand_num {
-            0 => Vehicle::new(lane, Direction::West),
-            1 => Vehicle::new(lane, Direction::Forward),
-            2 => Vehicle::new(lane, Direction::East),
+            0 => Vehicle::new(lane, Direction::West, broadcaster),
+            1 => Vehicle::new(lane, Direction::Forward, broadcaster),
+            2 => Vehicle::new(lane, Direction::East, broadcaster),
             _ => unreachable!(),
         };
     }

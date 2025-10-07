@@ -18,6 +18,10 @@ impl Renderer {
             .load_texture("../../assets/statistic_overlay.png")
             .unwrap();
 
+        let debug_overlay = texture_creator
+            .load_texture("../../assets/debug_overlay.png")
+            .unwrap();
+
         // Displaying the main overlay
         self.canvas
             .copy(&main_overlay, None, None)
@@ -50,6 +54,17 @@ impl Renderer {
                     Rect::new(1000, coordinates_second, 400, 500),
                 )
                 .expect("Error generating the statistic overlay");
+        }
+
+        // If both Statistics & Keybinds overlay are off, display debug overlay
+        if !ui_state.keybinds_panel && !ui_state.statistic_panel {
+            self.canvas
+                .copy(
+                    &debug_overlay,
+                    None,
+                    Rect::new(1000, coordinates_first, 400, 1000),
+                )
+                .expect("Error generating the debug overlay");
         }
     }
 }

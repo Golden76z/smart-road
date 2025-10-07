@@ -5,7 +5,7 @@ use std::{
 
 use crate::simulation::Vehicle;
 
-#[derive(Hash, Eq, PartialEq, Clone, Copy)]
+#[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
 pub enum Lane {
     Up,
     Bottom,
@@ -13,7 +13,7 @@ pub enum Lane {
     Right,
 }
 
-#[derive(Hash, Eq, PartialEq, Clone, Copy)]
+#[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
 pub enum Direction {
     West,
     Forward,

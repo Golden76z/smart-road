@@ -1,24 +1,28 @@
+use sdl2::ttf;
 use std::time::Duration;
 
+use crate::config::{FPS, MessageType};
 use crate::config::{GameSettings, TrafficLanes};
-// use crate::simulation::Vehicle;
-use crate::{config::FPS, render::renderer::Renderer};
 
 mod config;
 mod render;
 mod simulation;
 
 pub fn main() -> Result<(), String> {
-    println!("<---- Road intersection start ---->");
-
     // Initializing the main config settings struct
     let sdl_context = sdl2::init().unwrap();
-    let mut game_config = GameSettings::new(&sdl_context);
+    let ttf_context = ttf::init().unwrap();
+    let mut game_config = GameSettings::new(&sdl_context, &ttf_context);
+
+    let texture_creator = game_config.render.canvas.texture_creator();
+
+    // Broadcasting the starting message
+    game_config
+        .broadcaster
+        .log("Smart road start", config::MessageType::Info);
 
     // Initializing the structs needed
     let _lanes = TrafficLanes::new();
-
-    // render.canvas.set_draw_color(Color::RGB(0, 255, 255));
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
@@ -26,19 +30,31 @@ pub fn main() -> Result<(), String> {
         // renderer.canvas.clear();
         game_config.render.canvas.clear();
 
-        // Input listener - Vehicle spawning
+        // Creating the map textures
+        game_config.render.create_map();
+
+        // Input listener - Vehicle spawning & rendering
         for event in event_pump.poll_iter() {
             match game_config.input_listener(event) {
                 Ok(()) => {}
                 Err(msg) => {
+                    game_config
+                        .broadcaster
+                        .log("Program stopped", MessageType::Error);
                     return Err(msg);
                 }
             }
         }
 
-        // Drawing the map textures
-        game_config.render.create_map();
+        // Drawing the overlays
         game_config.render.create_overlay(&mut game_config.ui_state);
+
+        // Writing the debug info on the panel (if visible)
+        game_config.broadcaster.render(
+            &mut game_config.render.canvas,
+            &texture_creator,
+            &mut game_config.ui_state,
+        );
 
         // Render the drawn picture to the screen
         game_config.render.canvas.present();

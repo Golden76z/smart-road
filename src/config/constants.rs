@@ -7,6 +7,12 @@ pub const PAUSE: bool = false;
 pub const SPAWN_OFFSET_X: u32 = SCREEN_WIDTH / 10;
 pub const SPAWN_OFFSET_Y: u32 = SCREEN_HEIGHT / 10;
 
+// <============================= Broadcast settings ==============================>
+
+pub const MAX_DEBUG_MESSAGES: u32 = 27;
+pub const BORDER_MARGIN: i32 = 15;
+pub const MESSAGE_SPAWN: i32 = SCREEN_WIDTH as i32 + 50;
+
 // <================================ Grid settings ================================>
 
 pub const TILE_WIDTH: u32 = SCREEN_WIDTH / 20;
