@@ -63,13 +63,13 @@ impl<'a> Broadcaster<'a> {
             ),
             MessageType::Warning => (
                 Color::RGB(180, 180, 120),
-                Color::RGB(50, 50, 15),
-                Color::RGB(120, 90, 0),
+                Color::RGB(80, 50, 15),
+                Color::RGB(90, 70, 0),
             ),
             MessageType::Error => (
-                Color::RGB(180, 120, 120),
-                Color::RGB(50, 15, 15),
-                Color::RGB(180, 0, 0),
+                Color::RGB(220, 120, 120),
+                Color::RGB(90, 20, 20),
+                Color::RGB(120, 0, 0),
             ),
         }
     }

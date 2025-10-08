@@ -36,7 +36,7 @@ impl Controller {
     // Activating manual mode
     pub fn manual_mode(&mut self) {
         self.manual = true;
-        self.manual = false;
+        self.random = false;
     }
 
     // Activating a lane (only for manual mode)

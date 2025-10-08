@@ -14,15 +14,18 @@ impl<'a> GameSettings<'a> {
                 match k {
                     // Closing the programm when Escape key is pressed
                     sdl2::keyboard::Keycode::Escape => {
-                        self.broadcaster.log("Game stop", MessageType::Info);
+                        self.broadcaster.log("Game stop", MessageType::Setting);
                         return Err("Program stopped".to_string());
                     }
 
                     // Toggle the keybinds panel (ON by default)
                     sdl2::keyboard::Keycode::I => {
                         self.ui_state.toggle_keybinds();
-                        self.broadcaster
-                            .log("Keybinds panel switched", MessageType::Info);
+                        let msg = format!(
+                            "Keybinds panel switched from: {:?} to {:?}",
+                            !self.ui_state.keybinds_panel, self.ui_state.keybinds_panel
+                        );
+                        self.broadcaster.log(&msg, MessageType::Setting);
                         Ok(())
                     }
                     // Toggle the statistic panel (ON by default)
@@ -42,7 +45,7 @@ impl<'a> GameSettings<'a> {
                     sdl2::keyboard::Keycode::R => {
                         self.controller.random_mode();
                         self.broadcaster
-                            .log("Random mode switched", MessageType::Error);
+                            .log("Random mode switched", MessageType::Warning);
                         Ok(())
                     }
 

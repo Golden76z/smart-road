@@ -47,7 +47,7 @@ pub fn main() -> Result<(), String> {
         }
 
         // Drawing the overlays
-        game_config.render.create_overlay(&mut game_config.ui_state);
+        game_config.create_overlay();
 
         // Writing the debug info on the panel (if visible)
         game_config.broadcaster.render(
