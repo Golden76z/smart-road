@@ -1,7 +1,7 @@
 pub struct UiState {
-    keybinds_panel: bool,
-    statistic_panel: bool,
-    debug_panel: bool,
+    pub keybinds_panel: bool,
+    pub statistic_panel: bool,
+    pub debug_panel: bool,
 }
 
 impl UiState {
@@ -29,7 +29,7 @@ impl UiState {
         Self::toggle(&mut self.debug_panel);
     }
 
-    pub fn toggle_all(&mut self) {
+    pub fn _toggle_all(&mut self) {
         Self::toggle(&mut self.keybinds_panel);
         Self::toggle(&mut self.statistic_panel);
         Self::toggle(&mut self.debug_panel);

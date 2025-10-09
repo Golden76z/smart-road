@@ -1,11 +1,17 @@
 // <=============================== Screen settings ===============================>
 
-pub const SCREEN_WIDTH: u32 = 1000;
+pub const SCREEN_WIDTH: u32 = 1400;
 pub const SCREEN_HEIGHT: u32 = 1000;
 pub const FPS: u32 = 60;
 pub const PAUSE: bool = false;
 pub const SPAWN_OFFSET_X: u32 = SCREEN_WIDTH / 10;
 pub const SPAWN_OFFSET_Y: u32 = SCREEN_HEIGHT / 10;
+
+// <============================= Broadcast settings ==============================>
+
+pub const MAX_DEBUG_MESSAGES: u32 = 27;
+pub const BORDER_MARGIN: i32 = 15;
+pub const MESSAGE_SPAWN: i32 = SCREEN_WIDTH as i32 + 50;
 
 // <================================ Grid settings ================================>
 
@@ -24,7 +30,8 @@ pub const VELOCITY_NORMAL: u32 = 35;
 pub const VELOCITY_FAST: u32 = 50;
 
 // Spawn cooldown
-pub const SPAWN_COOLDOWN: u64 = 1000;
+pub const SPAWN_COOLDOWN: u64 = 1200;
+pub const KEY_COOLDOWN: u64 = 400;
 
 // <=============================== Spawn positions ===============================>
 

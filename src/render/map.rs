@@ -37,16 +37,16 @@ impl Renderer {
 
         // Loading the textures
         let lane_vertical = texture_creator
-            .load_texture("../../assets/lane_vertical.png")
+            .load_texture("../../assets/images/road/lane_vertical.png")
             .unwrap();
         let lane_horizontal = texture_creator
-            .load_texture("../../assets/lane_horizontal.png")
+            .load_texture("../../assets/images/road/lane_horizontal.png")
             .unwrap();
         let corner = texture_creator
-            .load_texture("../../assets/bottom-left.png")
+            .load_texture("../../assets/images/road/bottom-left.png")
             .unwrap();
         let center = texture_creator
-            .load_texture("../../assets/center.png")
+            .load_texture("../../assets/images/road/center.png")
             .unwrap();
 
         // Drawing the 4 corners of the map
