@@ -1,9 +1,16 @@
+#[derive(Eq, PartialEq, Hash, Clone, Copy, Debug)]
 pub enum ArrowKey {
     Up,
     Down,
     Left,
     Right,
     None,
+}
+
+#[derive(Eq, PartialEq, Hash, Clone, Copy, Debug)]
+pub enum Mode {
+    random,
+    manual,
 }
 
 pub struct Controller {
@@ -31,6 +38,7 @@ impl Controller {
     pub fn random_mode(&mut self) {
         self.random = true;
         self.manual = false;
+        self.arrow_key = ArrowKey::None;
     }
 
     // Activating manual mode

@@ -30,7 +30,8 @@ pub const VELOCITY_NORMAL: u32 = 35;
 pub const VELOCITY_FAST: u32 = 50;
 
 // Spawn cooldown
-pub const SPAWN_COOLDOWN: u64 = 1000;
+pub const SPAWN_COOLDOWN: u64 = 1200;
+pub const KEY_COOLDOWN: u64 = 400;
 
 // <=============================== Spawn positions ===============================>
 
