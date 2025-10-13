@@ -7,7 +7,7 @@ use crate::config::{
 use rand::prelude::*;
 
 pub struct Vehicle {
-    pub spawn: (f32, f32),
+    pub spawn: (i32, i32),
     pub lane: Lane,
     pub direction: Direction,
 }
@@ -19,7 +19,7 @@ impl Vehicle {
         broadcast: &mut Broadcaster,
         spawn_manager: &mut SpawnManager,
     ) -> Option<Self> {
-        let position: (f32, f32);
+        let position: (i32, i32);
 
         match lane {
             Lane::Up => match direction {
