@@ -74,48 +74,28 @@ impl<'a> GameSettings<'a> {
                                 }
                                 sdl2::keyboard::Keycode::Num1 => match self.controller.arrow_key {
                                     ArrowKey::Up => {
-                                        Vehicle::new(
-                                            Lane::Up,
-                                            Direction::West,
-                                            &mut self.broadcaster,
-                                            &mut self.spawn_manager,
-                                        );
+                                        Vehicle::new(Lane::Up, Direction::West, self);
                                         self.spawn_manager.record_key_pressed_manual(
                                             ArrowKey::Up,
                                             Direction::West,
                                         );
                                     }
                                     ArrowKey::Down => {
-                                        Vehicle::new(
-                                            Lane::Bottom,
-                                            Direction::West,
-                                            &mut self.broadcaster,
-                                            &mut self.spawn_manager,
-                                        );
+                                        Vehicle::new(Lane::Bottom, Direction::West, self);
                                         self.spawn_manager.record_key_pressed_manual(
                                             ArrowKey::Down,
                                             Direction::West,
                                         );
                                     }
                                     ArrowKey::Left => {
-                                        Vehicle::new(
-                                            Lane::Left,
-                                            Direction::West,
-                                            &mut self.broadcaster,
-                                            &mut self.spawn_manager,
-                                        );
+                                        Vehicle::new(Lane::Left, Direction::West, self);
                                         self.spawn_manager.record_key_pressed_manual(
                                             ArrowKey::Left,
                                             Direction::West,
                                         );
                                     }
                                     ArrowKey::Right => {
-                                        Vehicle::new(
-                                            Lane::Right,
-                                            Direction::West,
-                                            &mut self.broadcaster,
-                                            &mut self.spawn_manager,
-                                        );
+                                        Vehicle::new(Lane::Right, Direction::West, self);
                                         self.spawn_manager.record_key_pressed_manual(
                                             ArrowKey::Right,
                                             Direction::West,
@@ -125,48 +105,28 @@ impl<'a> GameSettings<'a> {
                                 },
                                 sdl2::keyboard::Keycode::Num2 => match self.controller.arrow_key {
                                     ArrowKey::Up => {
-                                        Vehicle::new(
-                                            Lane::Up,
-                                            Direction::Forward,
-                                            &mut self.broadcaster,
-                                            &mut self.spawn_manager,
-                                        );
+                                        Vehicle::new(Lane::Up, Direction::Forward, self);
                                         self.spawn_manager.record_key_pressed_manual(
                                             ArrowKey::Up,
                                             Direction::Forward,
                                         );
                                     }
                                     ArrowKey::Down => {
-                                        Vehicle::new(
-                                            Lane::Bottom,
-                                            Direction::Forward,
-                                            &mut self.broadcaster,
-                                            &mut self.spawn_manager,
-                                        );
+                                        Vehicle::new(Lane::Bottom, Direction::Forward, self);
                                         self.spawn_manager.record_key_pressed_manual(
                                             ArrowKey::Down,
                                             Direction::Forward,
                                         );
                                     }
                                     ArrowKey::Left => {
-                                        Vehicle::new(
-                                            Lane::Left,
-                                            Direction::Forward,
-                                            &mut self.broadcaster,
-                                            &mut self.spawn_manager,
-                                        );
+                                        Vehicle::new(Lane::Left, Direction::Forward, self);
                                         self.spawn_manager.record_key_pressed_manual(
                                             ArrowKey::Left,
                                             Direction::Forward,
                                         );
                                     }
                                     ArrowKey::Right => {
-                                        Vehicle::new(
-                                            Lane::Right,
-                                            Direction::Forward,
-                                            &mut self.broadcaster,
-                                            &mut self.spawn_manager,
-                                        );
+                                        Vehicle::new(Lane::Right, Direction::Forward, self);
                                         self.spawn_manager.record_key_pressed_manual(
                                             ArrowKey::Right,
                                             Direction::Forward,
@@ -176,48 +136,28 @@ impl<'a> GameSettings<'a> {
                                 },
                                 sdl2::keyboard::Keycode::Num3 => match self.controller.arrow_key {
                                     ArrowKey::Up => {
-                                        Vehicle::new(
-                                            Lane::Up,
-                                            Direction::East,
-                                            &mut self.broadcaster,
-                                            &mut self.spawn_manager,
-                                        );
+                                        Vehicle::new(Lane::Up, Direction::East, self);
                                         self.spawn_manager.record_key_pressed_manual(
                                             ArrowKey::Up,
                                             Direction::East,
                                         );
                                     }
                                     ArrowKey::Down => {
-                                        Vehicle::new(
-                                            Lane::Bottom,
-                                            Direction::East,
-                                            &mut self.broadcaster,
-                                            &mut self.spawn_manager,
-                                        );
+                                        Vehicle::new(Lane::Bottom, Direction::East, self);
                                         self.spawn_manager.record_key_pressed_manual(
                                             ArrowKey::Down,
                                             Direction::East,
                                         );
                                     }
                                     ArrowKey::Left => {
-                                        Vehicle::new(
-                                            Lane::Left,
-                                            Direction::East,
-                                            &mut self.broadcaster,
-                                            &mut self.spawn_manager,
-                                        );
+                                        Vehicle::new(Lane::Left, Direction::East, self);
                                         self.spawn_manager.record_key_pressed_manual(
                                             ArrowKey::Left,
                                             Direction::East,
                                         );
                                     }
                                     ArrowKey::Right => {
-                                        Vehicle::new(
-                                            Lane::Right,
-                                            Direction::East,
-                                            &mut self.broadcaster,
-                                            &mut self.spawn_manager,
-                                        );
+                                        Vehicle::new(Lane::Right, Direction::East, self);
                                         self.spawn_manager.record_key_pressed_manual(
                                             ArrowKey::Right,
                                             Direction::East,
@@ -230,38 +170,22 @@ impl<'a> GameSettings<'a> {
                         } else {
                             match k {
                                 sdl2::keyboard::Keycode::Up => {
-                                    Vehicle::spawn_random(
-                                        Lane::Up,
-                                        &mut self.broadcaster,
-                                        &mut self.spawn_manager,
-                                    );
+                                    Vehicle::spawn_random(Lane::Up, self);
                                     self.spawn_manager
                                         .record_key_pressed_random(Mode::random, ArrowKey::Up);
                                 }
                                 sdl2::keyboard::Keycode::Down => {
-                                    Vehicle::spawn_random(
-                                        Lane::Bottom,
-                                        &mut self.broadcaster,
-                                        &mut self.spawn_manager,
-                                    );
+                                    Vehicle::spawn_random(Lane::Bottom, self);
                                     self.spawn_manager
                                         .record_key_pressed_random(Mode::random, ArrowKey::Down);
                                 }
                                 sdl2::keyboard::Keycode::Left => {
-                                    Vehicle::spawn_random(
-                                        Lane::Left,
-                                        &mut self.broadcaster,
-                                        &mut self.spawn_manager,
-                                    );
+                                    Vehicle::spawn_random(Lane::Left, self);
                                     self.spawn_manager
                                         .record_key_pressed_random(Mode::random, ArrowKey::Left);
                                 }
                                 sdl2::keyboard::Keycode::Right => {
-                                    Vehicle::spawn_random(
-                                        Lane::Right,
-                                        &mut self.broadcaster,
-                                        &mut self.spawn_manager,
-                                    );
+                                    Vehicle::spawn_random(Lane::Right, self);
                                     self.spawn_manager
                                         .record_key_pressed_random(Mode::random, ArrowKey::Right);
                                 }

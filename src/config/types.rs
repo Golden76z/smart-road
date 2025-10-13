@@ -1,9 +1,8 @@
+use crate::simulation::Vehicle;
 use std::{
-    collections::VecDeque,
+    collections::{HashMap, VecDeque},
     sync::{Arc, Mutex},
 };
-
-use crate::simulation::Vehicle;
 
 #[derive(Debug, Hash, Eq, PartialEq, Clone, Copy)]
 pub enum Lane {
@@ -23,19 +22,31 @@ pub enum Direction {
 pub type VehicleLane = Arc<Mutex<VecDeque<Vehicle>>>;
 
 pub struct TrafficLanes {
-    up: VehicleLane,
-    bottom: VehicleLane,
-    left: VehicleLane,
-    right: VehicleLane,
+    pub lanes: HashMap<(Lane, Direction), VehicleLane>,
 }
 
 impl TrafficLanes {
     pub fn new() -> Self {
-        TrafficLanes {
-            up: Arc::new(Mutex::new(VecDeque::new())),
-            bottom: Arc::new(Mutex::new(VecDeque::new())),
-            left: Arc::new(Mutex::new(VecDeque::new())),
-            right: Arc::new(Mutex::new(VecDeque::new())),
+        let mut lanes = HashMap::new();
+        for lane in [Lane::Up, Lane::Bottom, Lane::Left, Lane::Right] {
+            for dir in [Direction::West, Direction::Forward, Direction::East] {
+                lanes.insert((lane, dir), Arc::new(Mutex::new(VecDeque::new())));
+            }
         }
+        Self { lanes }
+    }
+
+    pub fn lane(&self, lane: Lane, dir: Direction) -> VehicleLane {
+        self.lanes
+            .get(&(lane, dir))
+            .expect("Lane/Direction combination missing")
+            .clone()
+    }
+
+    // Method to insert a new vehicle in the TrafficLane struct
+    pub fn insert_vehicle(&mut self, lane: Lane, direction: Direction, vehicle: Vehicle) {
+        let queue = self.lane(lane, direction);
+        let mut q = queue.lock().unwrap();
+        q.push_front(vehicle);
     }
 }
