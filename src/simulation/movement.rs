@@ -16,6 +16,9 @@ impl TrafficLanes {
             // Iterate mutably over all vehicles in this lane
             for vehicle in queue.iter_mut() {
                 vehicle.update_position(delta_time);
+                if vehicle.should_turn() && !vehicle.has_turned {
+                    vehicle.turning();
+                }
             }
         }
     }

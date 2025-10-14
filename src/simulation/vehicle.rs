@@ -1,4 +1,6 @@
 use crate::config::{
+    DESTINATION_BOTTOM_EAST, DESTINATION_BOTTOM_WEST, DESTINATION_LEFT_EAST, DESTINATION_LEFT_WEST,
+    DESTINATION_RIGHT_EAST, DESTINATION_RIGHT_WEST, DESTINATION_UP_EAST, DESTINATION_UP_WEST,
     Direction, GameSettings, Lane, MessageType, SPAWN_BOTTOM_EAST, SPAWN_BOTTOM_FORWARD,
     SPAWN_BOTTOM_WEST, SPAWN_LEFT_EAST, SPAWN_LEFT_FORWARD, SPAWN_LEFT_WEST, SPAWN_RIGHT_EAST,
     SPAWN_RIGHT_FORWARD, SPAWN_RIGHT_WEST, SPAWN_UP_EAST, SPAWN_UP_FORWARD, SPAWN_UP_WEST,
@@ -12,6 +14,7 @@ pub struct Vehicle {
     pub coordinates: (i32, i32),
     pub lane: Lane,
     pub direction: Direction,
+    pub has_turned: bool,
     pub velocity: (i32, i32),
     pub color: u8,
 }
@@ -73,6 +76,7 @@ impl Vehicle {
                 coordinates: position,
                 lane: lane,
                 direction: direction,
+                has_turned: false,
                 velocity: velocity,
                 color: rand_num,
             };
@@ -102,5 +106,59 @@ impl Vehicle {
             (self.coordinates.0 as f32 + self.velocity.0 as f32 * delta_time) as i32;
         self.coordinates.1 =
             (self.coordinates.1 as f32 + self.velocity.1 as f32 * delta_time) as i32;
+    }
+
+    // Comparing coordinates with destination to check if the vehicle should turn or not
+    pub fn should_turn(&mut self) -> bool {
+        match self.lane {
+            Lane::Up => match self.direction {
+                Direction::West => return self.coordinates.1 >= DESTINATION_UP_WEST.1,
+                Direction::East => return self.coordinates.1 >= DESTINATION_UP_EAST.1,
+                _ => false,
+            },
+            Lane::Bottom => match self.direction {
+                Direction::West => return self.coordinates.1 <= DESTINATION_BOTTOM_WEST.1,
+                Direction::East => return self.coordinates.1 <= DESTINATION_BOTTOM_EAST.1,
+                _ => false,
+            },
+            Lane::Left => match self.direction {
+                Direction::West => return self.coordinates.0 >= DESTINATION_LEFT_WEST.0,
+                Direction::East => return self.coordinates.0 >= DESTINATION_LEFT_EAST.0,
+                _ => false,
+            },
+            Lane::Right => match self.direction {
+                Direction::West => return self.coordinates.0 <= DESTINATION_RIGHT_WEST.0,
+                Direction::East => return self.coordinates.0 <= DESTINATION_RIGHT_EAST.0,
+                _ => false,
+            },
+        }
+    }
+
+    // Method to change the velocity (turning left or right)
+    pub fn turning(&mut self) {
+        self.has_turned = true;
+
+        match self.lane {
+            Lane::Up => match self.direction {
+                Direction::West => self.velocity = (VELOCITY_NORMAL, 0),
+                Direction::East => self.velocity = (-VELOCITY_NORMAL, 0),
+                _ => {}
+            },
+            Lane::Bottom => match self.direction {
+                Direction::West => self.velocity = (-VELOCITY_NORMAL, 0),
+                Direction::East => self.velocity = (VELOCITY_NORMAL, 0),
+                _ => {}
+            },
+            Lane::Left => match self.direction {
+                Direction::West => self.velocity = (0, -VELOCITY_NORMAL),
+                Direction::East => self.velocity = (0, VELOCITY_NORMAL),
+                _ => {}
+            },
+            Lane::Right => match self.direction {
+                Direction::West => self.velocity = (0, VELOCITY_NORMAL),
+                Direction::East => self.velocity = (0, -VELOCITY_NORMAL),
+                _ => {}
+            },
+        }
     }
 }
