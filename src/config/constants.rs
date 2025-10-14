@@ -5,8 +5,8 @@ pub const MAP_WIDTH: u32 = 1000;
 pub const SCREEN_HEIGHT: u32 = 1000;
 pub const FPS: u32 = 60;
 pub const PAUSE: bool = false;
-pub const SPAWN_OFFSET_X: u32 = SCREEN_WIDTH / 10;
-pub const SPAWN_OFFSET_Y: u32 = SCREEN_HEIGHT / 10;
+pub const SPAWN_OFFSET_X: u32 = SCREEN_WIDTH / 20;
+pub const SPAWN_OFFSET_Y: u32 = SCREEN_HEIGHT / 20;
 
 // <============================= Broadcast settings ==============================>
 
@@ -117,8 +117,8 @@ pub const DESTINATION_UP_WEST: (i32, i32) = (
     (SCREEN_HEIGHT / 2) as i32,
 );
 pub const DESTINATION_UP_FORWARD: (i32, i32) = (
-    MAP_WIDTH as i32 - (2 * VEHICLE_HEIGHT as i32),
-    (MAP_WIDTH + SPAWN_OFFSET_Y) as i32,
+    (MAP_WIDTH / 2) as i32 - (2 * VEHICLE_HEIGHT as i32),
+    (SCREEN_HEIGHT + SPAWN_OFFSET_Y) as i32,
 );
 pub const DESTINATION_UP_EAST: (i32, i32) = (
     SPAWN_OFFSET_X as i32 * -1,

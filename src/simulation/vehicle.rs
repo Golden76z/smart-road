@@ -1,10 +1,11 @@
 use crate::config::{
-    DESTINATION_BOTTOM_EAST, DESTINATION_BOTTOM_WEST, DESTINATION_LEFT_EAST, DESTINATION_LEFT_WEST,
-    DESTINATION_RIGHT_EAST, DESTINATION_RIGHT_WEST, DESTINATION_UP_EAST, DESTINATION_UP_WEST,
-    Direction, GameSettings, Lane, MessageType, SPAWN_BOTTOM_EAST, SPAWN_BOTTOM_FORWARD,
-    SPAWN_BOTTOM_WEST, SPAWN_LEFT_EAST, SPAWN_LEFT_FORWARD, SPAWN_LEFT_WEST, SPAWN_RIGHT_EAST,
-    SPAWN_RIGHT_FORWARD, SPAWN_RIGHT_WEST, SPAWN_UP_EAST, SPAWN_UP_FORWARD, SPAWN_UP_WEST,
-    VELOCITY_NORMAL,
+    DESTINATION_BOTTOM_EAST, DESTINATION_BOTTOM_FORWARD, DESTINATION_BOTTOM_WEST,
+    DESTINATION_LEFT_EAST, DESTINATION_LEFT_FORWARD, DESTINATION_LEFT_WEST, DESTINATION_RIGHT_EAST,
+    DESTINATION_RIGHT_FORWARD, DESTINATION_RIGHT_WEST, DESTINATION_UP_EAST, DESTINATION_UP_FORWARD,
+    DESTINATION_UP_WEST, Direction, GameSettings, Lane, MessageType, SPAWN_BOTTOM_EAST,
+    SPAWN_BOTTOM_FORWARD, SPAWN_BOTTOM_WEST, SPAWN_LEFT_EAST, SPAWN_LEFT_FORWARD, SPAWN_LEFT_WEST,
+    SPAWN_RIGHT_EAST, SPAWN_RIGHT_FORWARD, SPAWN_RIGHT_WEST, SPAWN_UP_EAST, SPAWN_UP_FORWARD,
+    SPAWN_UP_WEST, VELOCITY_NORMAL,
 };
 use rand::prelude::*;
 
@@ -189,6 +190,56 @@ impl Vehicle {
                     self.sprite_angle = 0.0
                 }
                 _ => {}
+            },
+        }
+    }
+
+    // Checking if a vehicle has reached its destination (should be removed from the array)
+    pub fn has_reached_destination(&mut self) -> bool {
+        match self.lane {
+            Lane::Up => match self.direction {
+                Direction::West => {
+                    self.coordinates.0 >= DESTINATION_UP_WEST.0
+                        && self.coordinates.1 >= DESTINATION_UP_WEST.1
+                }
+                Direction::Forward => self.coordinates.1 >= DESTINATION_UP_FORWARD.1,
+                Direction::East => {
+                    self.coordinates.0 <= DESTINATION_UP_EAST.0
+                        && self.coordinates.1 >= DESTINATION_UP_EAST.1
+                }
+            },
+            Lane::Bottom => match self.direction {
+                Direction::West => {
+                    self.coordinates.0 <= DESTINATION_BOTTOM_WEST.0
+                        && self.coordinates.1 <= DESTINATION_BOTTOM_WEST.1
+                }
+                Direction::Forward => self.coordinates.1 <= DESTINATION_BOTTOM_FORWARD.1,
+                Direction::East => {
+                    self.coordinates.0 >= DESTINATION_BOTTOM_EAST.0
+                        && self.coordinates.1 <= DESTINATION_BOTTOM_EAST.1
+                }
+            },
+            Lane::Left => match self.direction {
+                Direction::West => {
+                    self.coordinates.0 >= DESTINATION_LEFT_WEST.0
+                        && self.coordinates.1 <= DESTINATION_LEFT_WEST.1
+                }
+                Direction::Forward => self.coordinates.0 >= DESTINATION_LEFT_FORWARD.0,
+                Direction::East => {
+                    self.coordinates.0 >= DESTINATION_LEFT_EAST.0
+                        && self.coordinates.1 >= DESTINATION_LEFT_EAST.1
+                }
+            },
+            Lane::Right => match self.direction {
+                Direction::West => {
+                    self.coordinates.0 <= DESTINATION_RIGHT_WEST.0
+                        && self.coordinates.1 >= DESTINATION_RIGHT_WEST.1
+                }
+                Direction::Forward => self.coordinates.0 <= DESTINATION_RIGHT_FORWARD.0,
+                Direction::East => {
+                    self.coordinates.0 <= DESTINATION_RIGHT_EAST.0
+                        && self.coordinates.1 <= DESTINATION_RIGHT_EAST.1
+                }
             },
         }
     }

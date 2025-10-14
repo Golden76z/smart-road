@@ -49,7 +49,7 @@ pub fn main() -> Result<(), String> {
         // Update the vehicles positions
         game_config
             .lanes
-            .update_position(&mut game_config.time_tracker);
+            .update_position(&mut game_config.time_tracker, &mut game_config.broadcaster);
 
         // Render the vehicles
         game_config.render_vehicles(&texture_creator);
