@@ -26,20 +26,20 @@ impl<'a> GameSettings<'a> {
                 let (x, y) = vehicle.coordinates;
                 let texture = &car_textures[vehicle.color as usize % car_textures.len()];
 
-                // Determine sprite rotation based on lane and direction
-                let angle = match lane {
-                    Lane::Up => 180.0,
-                    Lane::Bottom => 0.0,
-                    Lane::Left => 90.0,
-                    Lane::Right => 270.0,
-                };
-
                 // Draw car at its coordinates
                 let dest = Rect::new(x as i32, y as i32, VEHICLE_WIDTH, VEHICLE_HEIGHT);
 
                 self.render
                     .canvas
-                    .copy_ex(&texture, None, dest, angle, None, false, false)
+                    .copy_ex(
+                        &texture,
+                        None,
+                        dest,
+                        vehicle.sprite_angle,
+                        None,
+                        false,
+                        false,
+                    )
                     .unwrap();
             }
         }
