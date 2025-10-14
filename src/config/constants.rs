@@ -1,6 +1,7 @@
 // <=============================== Screen settings ===============================>
 
 pub const SCREEN_WIDTH: u32 = 1400;
+pub const MAP_WIDTH: u32 = 1000;
 pub const SCREEN_HEIGHT: u32 = 1000;
 pub const FPS: u32 = 60;
 pub const PAUSE: bool = false;
@@ -10,12 +11,12 @@ pub const SPAWN_OFFSET_Y: u32 = SCREEN_HEIGHT / 10;
 // <============================= Broadcast settings ==============================>
 
 pub const MAX_DEBUG_MESSAGES: u32 = 27;
-pub const BORDER_MARGIN: i32 = 15;
-pub const MESSAGE_SPAWN: i32 = SCREEN_WIDTH as i32 + 50;
+pub const BORDER_MARGIN: u32 = 15;
+pub const MESSAGE_SPAWN: u32 = SCREEN_WIDTH as u32 + 50;
 
 // <================================ Grid settings ================================>
 
-pub const TILE_WIDTH: u32 = SCREEN_WIDTH / 20;
+pub const TILE_WIDTH: u32 = MAP_WIDTH / 20;
 pub const TILE_HEIGHT: u32 = SCREEN_HEIGHT / 20;
 
 // <=============================== Physics settings ==============================>
@@ -25,9 +26,9 @@ pub const VEHICLE_HEIGHT: u32 = TILE_HEIGHT;
 pub const SAFE_DISTANCE: u32 = 2 * VEHICLE_WIDTH;
 
 // Velocity - Pixels per second
-pub const VELOCITY_SLOW: u32 = 20;
-pub const VELOCITY_NORMAL: u32 = 35;
-pub const VELOCITY_FAST: u32 = 50;
+pub const VELOCITY_SLOW: i32 = 80;
+pub const VELOCITY_NORMAL: i32 = 120;
+pub const VELOCITY_FAST: i32 = 160;
 
 // Spawn cooldown
 pub const SPAWN_COOLDOWN: u64 = 1200;
@@ -37,60 +38,57 @@ pub const KEY_COOLDOWN: u64 = 400;
 
 // <----------------------------------  BOTTOM  ----------------------------------->
 
-pub const SPAWN_BOTTOM_WEST: (f32, f32) = (
-    (SCREEN_WIDTH / 2) as f32 + (2.0 * TILE_WIDTH as f32) + (TILE_WIDTH as f32 / 2.0),
-    ((SCREEN_HEIGHT + SPAWN_OFFSET_Y) as f32),
+pub const SPAWN_BOTTOM_WEST: (i32, i32) = (
+    (MAP_WIDTH / 2) as i32 + (2 * TILE_WIDTH as i32),
+    ((SCREEN_HEIGHT + SPAWN_OFFSET_Y) as i32),
 );
-pub const SPAWN_BOTTOM_FORWARD: (f32, f32) = (
-    (SCREEN_WIDTH / 2) as f32 + (TILE_WIDTH as f32 + (TILE_WIDTH as f32 / 2.0)),
-    ((SCREEN_HEIGHT + SPAWN_OFFSET_Y) as f32),
+pub const SPAWN_BOTTOM_FORWARD: (i32, i32) = (
+    (MAP_WIDTH / 2) as i32 + TILE_WIDTH as i32,
+    ((SCREEN_HEIGHT + SPAWN_OFFSET_Y) as i32),
 );
-pub const SPAWN_BOTTOM_EAST: (f32, f32) = (
-    (SCREEN_WIDTH / 2) as f32 + (TILE_WIDTH as f32 / 2.0),
-    ((SCREEN_HEIGHT + SPAWN_OFFSET_Y) as f32),
+pub const SPAWN_BOTTOM_EAST: (i32, i32) = (
+    (MAP_WIDTH / 2) as i32,
+    ((SCREEN_HEIGHT + SPAWN_OFFSET_Y) as i32),
 );
 
 // <------------------------------------  UP  ------------------------------------->
 
-pub const SPAWN_UP_WEST: (f32, f32) = (
-    (SCREEN_WIDTH / 2) as f32 + (TILE_WIDTH as f32 / 2.0),
-    SPAWN_OFFSET_Y as f32 * -1.0,
+pub const SPAWN_UP_WEST: (i32, i32) = (
+    (MAP_WIDTH / 2) as i32 - (TILE_WIDTH as i32),
+    SPAWN_OFFSET_Y as i32 * -1,
 );
-pub const SPAWN_UP_FORWARD: (f32, f32) = (
-    (SCREEN_WIDTH / 2) as f32 + (TILE_WIDTH as f32 + (TILE_WIDTH as f32 / 2.0)),
-    SPAWN_OFFSET_Y as f32 * -1.0,
+pub const SPAWN_UP_FORWARD: (i32, i32) = (
+    (MAP_WIDTH / 2) as i32 - (2 * TILE_WIDTH as i32),
+    SPAWN_OFFSET_Y as i32 * -1,
 );
-pub const SPAWN_UP_EAST: (f32, f32) = (
-    (SCREEN_WIDTH / 2) as f32 + (2.0 * TILE_WIDTH as f32) + (TILE_WIDTH as f32 / 2.0),
-    SPAWN_OFFSET_Y as f32 * -1.0,
+pub const SPAWN_UP_EAST: (i32, i32) = (
+    (MAP_WIDTH / 2) as i32 - (3 * TILE_WIDTH as i32),
+    SPAWN_OFFSET_Y as i32 * -1,
 );
 
 // <-----------------------------------  LEFT  ------------------------------------>
 
-pub const SPAWN_LEFT_WEST: (f32, f32) = (
-    SPAWN_OFFSET_X as f32 * -1.0,
-    (SCREEN_HEIGHT / 2) as f32 + (TILE_HEIGHT as f32 / 2.0),
+pub const SPAWN_LEFT_WEST: (i32, i32) = (SPAWN_OFFSET_X as i32 * -1, (SCREEN_HEIGHT / 2) as i32);
+pub const SPAWN_LEFT_FORWARD: (i32, i32) = (
+    SPAWN_OFFSET_X as i32 * -1,
+    (SCREEN_HEIGHT / 2) as i32 + TILE_HEIGHT as i32,
 );
-pub const SPAWN_LEFT_FORWARD: (f32, f32) = (
-    SPAWN_OFFSET_X as f32 * -1.0,
-    (SCREEN_HEIGHT / 2) as f32 + TILE_HEIGHT as f32 + (TILE_HEIGHT as f32 / 2.0),
-);
-pub const SPAWN_LEFT_EAST: (f32, f32) = (
-    SPAWN_OFFSET_X as f32 * -1.0,
-    (SCREEN_HEIGHT / 2) as f32 + (2.0 * TILE_HEIGHT as f32) + (TILE_HEIGHT as f32 / 2.0),
+pub const SPAWN_LEFT_EAST: (i32, i32) = (
+    SPAWN_OFFSET_X as i32 * -1,
+    (SCREEN_HEIGHT / 2) as i32 + (2 * TILE_HEIGHT as i32),
 );
 
 // <-----------------------------------  RIGHT  ----------------------------------->
 
-pub const SPAWN_RIGHT_WEST: (f32, f32) = (
-    (SCREEN_WIDTH + SPAWN_OFFSET_X) as f32,
-    (SCREEN_HEIGHT / 2) as f32 + (TILE_HEIGHT as f32 / 2.0),
+pub const SPAWN_RIGHT_WEST: (i32, i32) = (
+    (MAP_WIDTH + SPAWN_OFFSET_X) as i32,
+    (SCREEN_HEIGHT / 2) as i32 - (TILE_HEIGHT as i32),
 );
-pub const SPAWN_RIGHT_FORWARD: (f32, f32) = (
-    (SCREEN_WIDTH + SPAWN_OFFSET_X) as f32,
-    (SCREEN_HEIGHT / 2) as f32 + TILE_HEIGHT as f32 + (TILE_HEIGHT as f32 / 2.0),
+pub const SPAWN_RIGHT_FORWARD: (i32, i32) = (
+    (MAP_WIDTH + SPAWN_OFFSET_X) as i32,
+    (SCREEN_HEIGHT / 2) as i32 - (2 * TILE_HEIGHT as i32),
 );
-pub const SPAWN_RIGHT_EAST: (f32, f32) = (
-    (SCREEN_WIDTH + SPAWN_OFFSET_X) as f32,
-    (SCREEN_HEIGHT / 2) as f32 + (2.0 * TILE_HEIGHT as f32) + (TILE_HEIGHT as f32 / 2.0),
+pub const SPAWN_RIGHT_EAST: (i32, i32) = (
+    (MAP_WIDTH + SPAWN_OFFSET_X) as i32,
+    (SCREEN_HEIGHT / 2) as i32 - (3 * TILE_HEIGHT as i32),
 );

@@ -46,15 +46,23 @@ pub fn main() -> Result<(), String> {
             }
         }
 
-        // Drawing the overlays
-        game_config.create_overlay();
-
         // Writing the debug info on the panel (if visible)
         game_config.broadcaster.render(
             &mut game_config.render.canvas,
             &texture_creator,
             &mut game_config.ui_state,
         );
+
+        // Update the vehicles positions
+        game_config
+            .lanes
+            .update_position(&mut game_config.time_tracker);
+
+        // Render the vehicles
+        game_config.render_vehicles(&texture_creator);
+
+        // Drawing the overlays
+        game_config.create_overlay();
 
         // Render the drawn picture to the screen
         game_config.render.canvas.present();

@@ -1,80 +1,106 @@
 use crate::config::{
-    Broadcaster, Direction, Lane, MessageType, SPAWN_BOTTOM_EAST, SPAWN_BOTTOM_FORWARD,
+    Direction, GameSettings, Lane, MessageType, SPAWN_BOTTOM_EAST, SPAWN_BOTTOM_FORWARD,
     SPAWN_BOTTOM_WEST, SPAWN_LEFT_EAST, SPAWN_LEFT_FORWARD, SPAWN_LEFT_WEST, SPAWN_RIGHT_EAST,
     SPAWN_RIGHT_FORWARD, SPAWN_RIGHT_WEST, SPAWN_UP_EAST, SPAWN_UP_FORWARD, SPAWN_UP_WEST,
-    SpawnManager,
+    VELOCITY_NORMAL,
 };
 use rand::prelude::*;
 
+#[derive(Debug, Clone)]
 pub struct Vehicle {
-    pub spawn: (f32, f32),
+    pub id: i16,
+    pub coordinates: (i32, i32),
     pub lane: Lane,
     pub direction: Direction,
+    pub velocity: (i32, i32),
+    pub color: u8,
 }
 
 impl Vehicle {
-    pub fn new(
-        lane: Lane,
-        direction: Direction,
-        broadcast: &mut Broadcaster,
-        spawn_manager: &mut SpawnManager,
-    ) -> Option<Self> {
-        let position: (f32, f32);
-
-        match lane {
-            Lane::Up => match direction {
-                Direction::West => position = SPAWN_UP_WEST,
-                Direction::Forward => position = SPAWN_UP_FORWARD,
-                Direction::East => position = SPAWN_UP_EAST,
-            },
-            Lane::Bottom => match direction {
-                Direction::West => position = SPAWN_BOTTOM_WEST,
-                Direction::Forward => position = SPAWN_BOTTOM_FORWARD,
-                Direction::East => position = SPAWN_BOTTOM_EAST,
-            },
-            Lane::Left => match direction {
-                Direction::West => position = SPAWN_LEFT_WEST,
-                Direction::Forward => position = SPAWN_LEFT_FORWARD,
-                Direction::East => position = SPAWN_LEFT_EAST,
-            },
-            Lane::Right => match direction {
-                Direction::West => position = SPAWN_RIGHT_WEST,
-                Direction::Forward => position = SPAWN_RIGHT_FORWARD,
-                Direction::East => position = SPAWN_RIGHT_EAST,
-            },
-        }
-
+    pub fn new(lane: Lane, direction: Direction, config: &mut GameSettings) {
         // Checking if we can spawn the vehicle on the lane (Checking the cooldown)
-        let can_spawn = spawn_manager.try_spawn(lane, direction);
+        let can_spawn = config.spawn_manager.try_spawn(lane, direction);
         if can_spawn {
+            // Generating a random number between 0 and 3 (for the sprite randomisation)
+            let mut rng = rand::rng();
+            let rand_num = rng.random_range(0..3);
+
+            // Getting the spawn coordinates depending on the lane and direction
+            let position: (i32, i32);
+            let mut velocity: (i32, i32) = (0, 0);
+            match lane {
+                Lane::Up => {
+                    match direction {
+                        Direction::West => position = SPAWN_UP_WEST,
+                        Direction::Forward => position = SPAWN_UP_FORWARD,
+                        Direction::East => position = SPAWN_UP_EAST,
+                    };
+                    velocity.1 = VELOCITY_NORMAL;
+                }
+                Lane::Bottom => {
+                    match direction {
+                        Direction::West => position = SPAWN_BOTTOM_WEST,
+                        Direction::Forward => position = SPAWN_BOTTOM_FORWARD,
+                        Direction::East => position = SPAWN_BOTTOM_EAST,
+                    };
+                    velocity.1 = -VELOCITY_NORMAL;
+                }
+                Lane::Left => {
+                    match direction {
+                        Direction::West => position = SPAWN_LEFT_WEST,
+                        Direction::Forward => position = SPAWN_LEFT_FORWARD,
+                        Direction::East => position = SPAWN_LEFT_EAST,
+                    };
+                    velocity.0 = VELOCITY_NORMAL;
+                }
+                Lane::Right => {
+                    match direction {
+                        Direction::West => position = SPAWN_RIGHT_WEST,
+                        Direction::Forward => position = SPAWN_RIGHT_FORWARD,
+                        Direction::East => position = SPAWN_RIGHT_EAST,
+                    };
+                    velocity.0 = -VELOCITY_NORMAL;
+                }
+            }
+
             // Creating the log notifiying the spawn
             let msg = format!("Spawn Vehicle on Lane: {:?} Going: {:?}", lane, direction);
-            broadcast.log(&msg, MessageType::Info);
+            config.broadcaster.log(&msg, MessageType::Info);
 
-            Some(Vehicle {
-                spawn: position,
+            // Creating the new vehicle
+            let vehicle = Vehicle {
+                id: config.id(),
+                coordinates: position,
                 lane: lane,
                 direction: direction,
-            })
+                velocity: velocity,
+                color: rand_num,
+            };
+
+            // Inserting the vehicle in the TrafficLane struct
+            config.lanes.insert_vehicle(lane, direction, vehicle);
         } else {
             let msg = format!("Spawn in cooldown ! ({:?} going {:?})", lane, direction);
-            broadcast.log(&msg, MessageType::Error);
-            None
+            config.broadcaster.log(&msg, MessageType::Error);
         }
     }
 
-    pub fn spawn_random(
-        lane: Lane,
-        broadcaster: &mut Broadcaster,
-        spawn_manager: &mut SpawnManager,
-    ) {
+    // Spawn a vehicle going to a random direction with a given lane
+    pub fn spawn_random(lane: Lane, config: &mut GameSettings) {
         let mut rng = rand::rng();
         let rand_num = rng.random_range(0..3);
         match rand_num {
-            0 => Vehicle::new(lane, Direction::West, broadcaster, spawn_manager),
-            1 => Vehicle::new(lane, Direction::Forward, broadcaster, spawn_manager),
-            2 => Vehicle::new(lane, Direction::East, broadcaster, spawn_manager),
+            0 => Vehicle::new(lane, Direction::West, config),
+            1 => Vehicle::new(lane, Direction::Forward, config),
+            2 => Vehicle::new(lane, Direction::East, config),
             _ => unreachable!(),
         };
+    }
+
+    pub fn update_position(&mut self, delta_time: f32) {
+        self.coordinates.0 =
+            (self.coordinates.0 as f32 + self.velocity.0 as f32 * delta_time) as i32;
+        self.coordinates.1 =
+            (self.coordinates.1 as f32 + self.velocity.1 as f32 * delta_time) as i32;
     }
 }
