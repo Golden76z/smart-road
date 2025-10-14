@@ -15,6 +15,7 @@ pub struct Vehicle {
     pub lane: Lane,
     pub direction: Direction,
     pub has_turned: bool,
+    pub sprite_angle: f64,
     pub velocity: (i32, i32),
     pub color: u8,
 }
@@ -31,6 +32,7 @@ impl Vehicle {
             // Getting the spawn coordinates depending on the lane and direction
             let position: (i32, i32);
             let mut velocity: (i32, i32) = (0, 0);
+            let sprite_angle: f64;
             match lane {
                 Lane::Up => {
                     match direction {
@@ -39,6 +41,7 @@ impl Vehicle {
                         Direction::East => position = SPAWN_UP_EAST,
                     };
                     velocity.1 = VELOCITY_NORMAL;
+                    sprite_angle = 180.0;
                 }
                 Lane::Bottom => {
                     match direction {
@@ -47,6 +50,7 @@ impl Vehicle {
                         Direction::East => position = SPAWN_BOTTOM_EAST,
                     };
                     velocity.1 = -VELOCITY_NORMAL;
+                    sprite_angle = 0.0;
                 }
                 Lane::Left => {
                     match direction {
@@ -55,6 +59,7 @@ impl Vehicle {
                         Direction::East => position = SPAWN_LEFT_EAST,
                     };
                     velocity.0 = VELOCITY_NORMAL;
+                    sprite_angle = 90.0;
                 }
                 Lane::Right => {
                     match direction {
@@ -63,6 +68,7 @@ impl Vehicle {
                         Direction::East => position = SPAWN_RIGHT_EAST,
                     };
                     velocity.0 = -VELOCITY_NORMAL;
+                    sprite_angle = 270.0;
                 }
             }
 
@@ -77,6 +83,7 @@ impl Vehicle {
                 lane: lane,
                 direction: direction,
                 has_turned: false,
+                sprite_angle: sprite_angle,
                 velocity: velocity,
                 color: rand_num,
             };
@@ -134,29 +141,53 @@ impl Vehicle {
         }
     }
 
-    // Method to change the velocity (turning left or right)
+    // Method to change the velocity (turning left or right) & sprite angle
     pub fn turning(&mut self) {
         self.has_turned = true;
 
         match self.lane {
             Lane::Up => match self.direction {
-                Direction::West => self.velocity = (VELOCITY_NORMAL, 0),
-                Direction::East => self.velocity = (-VELOCITY_NORMAL, 0),
+                Direction::West => {
+                    self.velocity = (VELOCITY_NORMAL, 0);
+                    self.sprite_angle = 90.0
+                }
+                Direction::East => {
+                    self.velocity = (-VELOCITY_NORMAL, 0);
+                    self.sprite_angle = 270.0
+                }
                 _ => {}
             },
             Lane::Bottom => match self.direction {
-                Direction::West => self.velocity = (-VELOCITY_NORMAL, 0),
-                Direction::East => self.velocity = (VELOCITY_NORMAL, 0),
+                Direction::West => {
+                    self.velocity = (-VELOCITY_NORMAL, 0);
+                    self.sprite_angle = 270.0
+                }
+                Direction::East => {
+                    self.velocity = (VELOCITY_NORMAL, 0);
+                    self.sprite_angle = 90.0
+                }
                 _ => {}
             },
             Lane::Left => match self.direction {
-                Direction::West => self.velocity = (0, -VELOCITY_NORMAL),
-                Direction::East => self.velocity = (0, VELOCITY_NORMAL),
+                Direction::West => {
+                    self.velocity = (0, -VELOCITY_NORMAL);
+                    self.sprite_angle = 0.0
+                }
+                Direction::East => {
+                    self.velocity = (0, VELOCITY_NORMAL);
+                    self.sprite_angle = 180.0
+                }
                 _ => {}
             },
             Lane::Right => match self.direction {
-                Direction::West => self.velocity = (0, VELOCITY_NORMAL),
-                Direction::East => self.velocity = (0, -VELOCITY_NORMAL),
+                Direction::West => {
+                    self.velocity = (0, VELOCITY_NORMAL);
+                    self.sprite_angle = 180.0
+                }
+                Direction::East => {
+                    self.velocity = (0, -VELOCITY_NORMAL);
+                    self.sprite_angle = 0.0
+                }
                 _ => {}
             },
         }
