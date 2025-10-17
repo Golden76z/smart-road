@@ -1,15 +1,19 @@
-use crate::config::{Broadcaster, MessageType, TrafficLanes};
+use sdl2::rect::Rect;
+
+use crate::config::{GameSettings, MessageType};
 use std::time::Instant;
 
-impl TrafficLanes {
-    pub fn update_position(&mut self, time_tracker: &mut Instant, broadcaster: &mut Broadcaster) {
+impl<'a> GameSettings<'a> {
+    pub fn update_position(&mut self) {
         // Calculate delta time
         let now = Instant::now();
-        let delta_time = now.duration_since(*time_tracker).as_secs_f32();
-        *time_tracker = now;
+        let delta_time = now.duration_since(self.time_tracker).as_secs_f32();
+        self.time_tracker = now;
+
+        let mut hitbox_vec: Vec<(i16, Rect)> = Vec::new();
 
         // Ranging over the TrafficLane struct containing all the vehicles
-        for ((_, _), vehicle_lane) in &self.lanes {
+        for ((_, _), vehicle_lane) in &self.lanes.lanes {
             // Lock the VecDeque<Vehicle>
             let mut queue = vehicle_lane.lock().unwrap();
 
@@ -26,7 +30,18 @@ impl TrafficLanes {
                 let reached = vehicle.has_reached_destination();
                 if reached {
                     let msg = format!("Vehicle: {:?} has reached destination !", vehicle.id);
-                    broadcaster.log(&msg, MessageType::Info);
+                    self.broadcaster.log(&msg, MessageType::Info);
+                }
+
+                // Creating hitbox checking against already processed vehicles
+                vehicle.create_hitbox(&hitbox_vec);
+
+                // Adapt velocity depending on the hitbox
+                vehicle.adapt_velocity();
+
+                // Add this vehicle's hitbox to the processed list for next vehicles to check
+                if let Some(hitbox) = vehicle.hitbox {
+                    hitbox_vec.push((vehicle.id, hitbox));
                 }
 
                 !reached

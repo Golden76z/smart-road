@@ -8,7 +8,7 @@ mod config;
 mod render;
 mod simulation;
 
-pub fn main() -> Result<(), String> {
+pub fn main() {
     // Initializing the main config settings struct
     let sdl_context = sdl2::init().unwrap();
     let ttf_context = ttf::init().unwrap();
@@ -26,7 +26,7 @@ pub fn main() -> Result<(), String> {
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
-    '_running: loop {
+    'game_loop: loop {
         // renderer.canvas.clear();
         game_config.render.canvas.clear();
 
@@ -38,18 +38,14 @@ pub fn main() -> Result<(), String> {
             match game_config.input_listener(event) {
                 Ok(()) => {}
                 Err(msg) => {
-                    game_config
-                        .broadcaster
-                        .log("Program stopped", MessageType::Error);
-                    return Err(msg);
+                    game_config.broadcaster.log(&msg, MessageType::Error);
+                    break 'game_loop;
                 }
             }
         }
 
         // Update the vehicles positions
-        game_config
-            .lanes
-            .update_position(&mut game_config.time_tracker, &mut game_config.broadcaster);
+        game_config.update_position();
 
         // Render the vehicles
         game_config.render_vehicles(&texture_creator);

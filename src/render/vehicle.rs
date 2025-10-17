@@ -1,6 +1,8 @@
-use sdl2::{image::LoadTexture, rect::Rect, render::TextureCreator, video::WindowContext};
+use sdl2::{
+    image::LoadTexture, pixels::Color, rect::Rect, render::TextureCreator, video::WindowContext,
+};
 
-use crate::config::{GameSettings, Lane, VEHICLE_HEIGHT, VEHICLE_WIDTH};
+use crate::config::{GameSettings, HitboxType, Lane, VEHICLE_HEIGHT, VEHICLE_WIDTH};
 
 impl<'a> GameSettings<'a> {
     pub fn render_vehicles(&mut self, texture_creator: &TextureCreator<WindowContext>) {
@@ -41,6 +43,15 @@ impl<'a> GameSettings<'a> {
                         false,
                     )
                     .unwrap();
+                match vehicle.hitbox_type {
+                    HitboxType::Big => self.render.canvas.set_draw_color(Color::RGB(0, 255, 0)),
+                    HitboxType::Medium => {
+                        self.render.canvas.set_draw_color(Color::RGB(255, 255, 0))
+                    }
+                    HitboxType::Small => self.render.canvas.set_draw_color(Color::RGB(255, 128, 0)),
+                    HitboxType::Stop => self.render.canvas.set_draw_color(Color::RGB(255, 0, 0)),
+                }
+                self.render.canvas.draw_rect(vehicle.hitbox.unwrap());
             }
         }
     }
