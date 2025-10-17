@@ -19,10 +19,19 @@ pub enum Direction {
     East,
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum HitboxType {
+    Big,
+    Medium,
+    Small,
+    Stop,
+}
+
 pub type VehicleLane = Arc<Mutex<VecDeque<Vehicle>>>;
 
 pub struct TrafficLanes {
     pub lanes: HashMap<(Lane, Direction), VehicleLane>,
+    // pub hitboxes: Vec<HitBox>,
 }
 
 impl TrafficLanes {
@@ -33,7 +42,10 @@ impl TrafficLanes {
                 lanes.insert((lane, dir), Arc::new(Mutex::new(VecDeque::new())));
             }
         }
-        Self { lanes }
+        Self {
+            lanes,
+            // hitboxes: Vec::new(),
+        }
     }
 
     pub fn lane(&self, lane: Lane, dir: Direction) -> VehicleLane {

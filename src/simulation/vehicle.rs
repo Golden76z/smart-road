@@ -2,12 +2,13 @@ use crate::config::{
     DESTINATION_BOTTOM_EAST, DESTINATION_BOTTOM_FORWARD, DESTINATION_BOTTOM_WEST,
     DESTINATION_LEFT_EAST, DESTINATION_LEFT_FORWARD, DESTINATION_LEFT_WEST, DESTINATION_RIGHT_EAST,
     DESTINATION_RIGHT_FORWARD, DESTINATION_RIGHT_WEST, DESTINATION_UP_EAST, DESTINATION_UP_FORWARD,
-    DESTINATION_UP_WEST, Direction, GameSettings, Lane, MessageType, SPAWN_BOTTOM_EAST,
+    DESTINATION_UP_WEST, Direction, GameSettings, HitboxType, Lane, MessageType, SPAWN_BOTTOM_EAST,
     SPAWN_BOTTOM_FORWARD, SPAWN_BOTTOM_WEST, SPAWN_LEFT_EAST, SPAWN_LEFT_FORWARD, SPAWN_LEFT_WEST,
     SPAWN_RIGHT_EAST, SPAWN_RIGHT_FORWARD, SPAWN_RIGHT_WEST, SPAWN_UP_EAST, SPAWN_UP_FORWARD,
     SPAWN_UP_WEST, VELOCITY_NORMAL,
 };
 use rand::prelude::*;
+use sdl2::rect::Rect;
 
 #[derive(Debug, Clone)]
 pub struct Vehicle {
@@ -17,6 +18,8 @@ pub struct Vehicle {
     pub direction: Direction,
     pub has_turned: bool,
     pub sprite_angle: f64,
+    pub hitbox: Option<Rect>,
+    pub hitbox_type: HitboxType,
     pub velocity: (i32, i32),
     pub color: u8,
 }
@@ -85,6 +88,8 @@ impl Vehicle {
                 direction: direction,
                 has_turned: false,
                 sprite_angle: sprite_angle,
+                hitbox: Some(Rect::new(0, 0, 0, 0)),
+                hitbox_type: HitboxType::Big,
                 velocity: velocity,
                 color: rand_num,
             };
