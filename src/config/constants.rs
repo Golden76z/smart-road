@@ -33,8 +33,8 @@ pub const VELOCITY_FAST: i32 = 160;
 // Hitboxes
 pub const BIG_HITBOX: u32 = 350;
 pub const MEDIUM_HITBOX: u32 = 250;
-pub const SMALL_HITBOX: u32 = 150;
-pub const STOP_HITBOX: u32 = 100;
+pub const SMALL_HITBOX: u32 = 125;
+pub const STOP_HITBOX: u32 = 75;
 
 // Spawn cooldown
 pub const SPAWN_COOLDOWN: u64 = 1200;

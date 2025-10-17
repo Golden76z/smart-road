@@ -89,7 +89,7 @@ impl Vehicle {
                 has_turned: false,
                 sprite_angle: sprite_angle,
                 hitbox: Some(Rect::new(0, 0, 0, 0)),
-                hitbox_type: HitboxType::Big,
+                hitbox_type: HitboxType::Stop,
                 velocity: velocity,
                 color: rand_num,
             };
