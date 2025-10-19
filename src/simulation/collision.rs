@@ -2,8 +2,8 @@ use sdl2::rect::Rect;
 
 use crate::{
     config::{
-        BIG_HITBOX, Direction, HitboxType, Lane, MEDIUM_HITBOX, SMALL_HITBOX, STOP_HITBOX,
-        VELOCITY_FAST, VELOCITY_NORMAL, VELOCITY_SLOW,
+        Direction, HitboxType, Lane, VELOCITY_FAST, VELOCITY_NORMAL, VELOCITY_SLOW,
+        VELOCITY_VERY_SLOW,
     },
     simulation::{Vehicle, rects_intersect, rotated_rect},
 };
@@ -19,6 +19,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (VELOCITY_FAST, 0),
                             HitboxType::Medium => self.velocity = (VELOCITY_NORMAL, 0),
                             HitboxType::Small => self.velocity = (VELOCITY_SLOW, 0),
+                            HitboxType::VerySmall => self.velocity = (VELOCITY_VERY_SLOW, 0),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     } else {
@@ -26,6 +27,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (0, VELOCITY_FAST),
                             HitboxType::Medium => self.velocity = (0, VELOCITY_NORMAL),
                             HitboxType::Small => self.velocity = (0, VELOCITY_SLOW),
+                            HitboxType::VerySmall => self.velocity = (0, VELOCITY_VERY_SLOW),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     }
@@ -34,6 +36,7 @@ impl Vehicle {
                     HitboxType::Big => self.velocity = (0, VELOCITY_FAST),
                     HitboxType::Medium => self.velocity = (0, VELOCITY_NORMAL),
                     HitboxType::Small => self.velocity = (0, VELOCITY_SLOW),
+                    HitboxType::VerySmall => self.velocity = (0, VELOCITY_VERY_SLOW),
                     HitboxType::Stop => self.velocity = (0, 0),
                 },
                 Direction::East => {
@@ -42,6 +45,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (-VELOCITY_FAST, 0),
                             HitboxType::Medium => self.velocity = (-VELOCITY_NORMAL, 0),
                             HitboxType::Small => self.velocity = (-VELOCITY_SLOW, 0),
+                            HitboxType::VerySmall => self.velocity = (-VELOCITY_VERY_SLOW, 0),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     } else {
@@ -49,6 +53,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (0, VELOCITY_FAST),
                             HitboxType::Medium => self.velocity = (0, VELOCITY_NORMAL),
                             HitboxType::Small => self.velocity = (0, VELOCITY_SLOW),
+                            HitboxType::VerySmall => self.velocity = (0, VELOCITY_VERY_SLOW),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     }
@@ -61,6 +66,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (-VELOCITY_FAST, 0),
                             HitboxType::Medium => self.velocity = (-VELOCITY_NORMAL, 0),
                             HitboxType::Small => self.velocity = (-VELOCITY_SLOW, 0),
+                            HitboxType::VerySmall => self.velocity = (-VELOCITY_VERY_SLOW, 0),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     } else {
@@ -68,6 +74,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (0, -VELOCITY_FAST),
                             HitboxType::Medium => self.velocity = (0, -VELOCITY_NORMAL),
                             HitboxType::Small => self.velocity = (0, -VELOCITY_SLOW),
+                            HitboxType::VerySmall => self.velocity = (0, -VELOCITY_VERY_SLOW),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     }
@@ -76,6 +83,7 @@ impl Vehicle {
                     HitboxType::Big => self.velocity = (0, -VELOCITY_FAST),
                     HitboxType::Medium => self.velocity = (0, -VELOCITY_NORMAL),
                     HitboxType::Small => self.velocity = (0, -VELOCITY_SLOW),
+                    HitboxType::VerySmall => self.velocity = (0, -VELOCITY_VERY_SLOW),
                     HitboxType::Stop => self.velocity = (0, 0),
                 },
                 Direction::East => {
@@ -84,6 +92,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (VELOCITY_FAST, 0),
                             HitboxType::Medium => self.velocity = (VELOCITY_NORMAL, 0),
                             HitboxType::Small => self.velocity = (VELOCITY_SLOW, 0),
+                            HitboxType::VerySmall => self.velocity = (VELOCITY_VERY_SLOW, 0),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     } else {
@@ -91,6 +100,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (0, -VELOCITY_FAST),
                             HitboxType::Medium => self.velocity = (0, -VELOCITY_NORMAL),
                             HitboxType::Small => self.velocity = (0, -VELOCITY_SLOW),
+                            HitboxType::VerySmall => self.velocity = (0, -VELOCITY_VERY_SLOW),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     }
@@ -103,6 +113,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (0, -VELOCITY_FAST),
                             HitboxType::Medium => self.velocity = (0, -VELOCITY_NORMAL),
                             HitboxType::Small => self.velocity = (0, -VELOCITY_SLOW),
+                            HitboxType::VerySmall => self.velocity = (0, -VELOCITY_VERY_SLOW),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     } else {
@@ -110,6 +121,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (VELOCITY_FAST, 0),
                             HitboxType::Medium => self.velocity = (VELOCITY_NORMAL, 0),
                             HitboxType::Small => self.velocity = (VELOCITY_SLOW, 0),
+                            HitboxType::VerySmall => self.velocity = (VELOCITY_VERY_SLOW, 0),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     }
@@ -118,6 +130,7 @@ impl Vehicle {
                     HitboxType::Big => self.velocity = (VELOCITY_FAST, 0),
                     HitboxType::Medium => self.velocity = (VELOCITY_NORMAL, 0),
                     HitboxType::Small => self.velocity = (VELOCITY_SLOW, 0),
+                    HitboxType::VerySmall => self.velocity = (VELOCITY_VERY_SLOW, 0),
                     HitboxType::Stop => self.velocity = (0, 0),
                 },
                 Direction::East => {
@@ -126,6 +139,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (0, VELOCITY_FAST),
                             HitboxType::Medium => self.velocity = (0, VELOCITY_NORMAL),
                             HitboxType::Small => self.velocity = (0, VELOCITY_SLOW),
+                            HitboxType::VerySmall => self.velocity = (0, VELOCITY_VERY_SLOW),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     } else {
@@ -133,6 +147,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (VELOCITY_FAST, 0),
                             HitboxType::Medium => self.velocity = (VELOCITY_NORMAL, 0),
                             HitboxType::Small => self.velocity = (VELOCITY_SLOW, 0),
+                            HitboxType::VerySmall => self.velocity = (VELOCITY_VERY_SLOW, 0),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     }
@@ -145,6 +160,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (0, VELOCITY_FAST),
                             HitboxType::Medium => self.velocity = (0, VELOCITY_NORMAL),
                             HitboxType::Small => self.velocity = (0, VELOCITY_SLOW),
+                            HitboxType::VerySmall => self.velocity = (0, VELOCITY_VERY_SLOW),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     } else {
@@ -152,6 +168,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (-VELOCITY_FAST, 0),
                             HitboxType::Medium => self.velocity = (-VELOCITY_NORMAL, 0),
                             HitboxType::Small => self.velocity = (-VELOCITY_SLOW, 0),
+                            HitboxType::VerySmall => self.velocity = (-VELOCITY_VERY_SLOW, 0),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     }
@@ -160,6 +177,7 @@ impl Vehicle {
                     HitboxType::Big => self.velocity = (-VELOCITY_FAST, 0),
                     HitboxType::Medium => self.velocity = (-VELOCITY_NORMAL, 0),
                     HitboxType::Small => self.velocity = (-VELOCITY_SLOW, 0),
+                    HitboxType::VerySmall => self.velocity = (-VELOCITY_VERY_SLOW, 0),
                     HitboxType::Stop => self.velocity = (0, 0),
                 },
                 Direction::East => {
@@ -168,6 +186,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (0, -VELOCITY_FAST),
                             HitboxType::Medium => self.velocity = (0, -VELOCITY_NORMAL),
                             HitboxType::Small => self.velocity = (0, -VELOCITY_SLOW),
+                            HitboxType::VerySmall => self.velocity = (0, -VELOCITY_VERY_SLOW),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     } else {
@@ -175,6 +194,7 @@ impl Vehicle {
                             HitboxType::Big => self.velocity = (-VELOCITY_FAST, 0),
                             HitboxType::Medium => self.velocity = (-VELOCITY_NORMAL, 0),
                             HitboxType::Small => self.velocity = (-VELOCITY_SLOW, 0),
+                            HitboxType::VerySmall => self.velocity = (-VELOCITY_VERY_SLOW, 0),
                             HitboxType::Stop => self.velocity = (0, 0),
                         }
                     }
@@ -303,8 +323,9 @@ impl Vehicle {
             Some(0) => self.hitbox_type = HitboxType::Big,
             Some(1) => self.hitbox_type = HitboxType::Medium,
             Some(2) => self.hitbox_type = HitboxType::Small,
-            Some(3) => self.hitbox_type = HitboxType::Stop,
-            _ => self.hitbox_type = HitboxType::Big,
+            Some(3) => self.hitbox_type = HitboxType::VerySmall,
+            Some(4) => self.hitbox_type = HitboxType::Stop,
+            _ => self.hitbox_type = HitboxType::Stop,
         }
 
         self.hitbox = Some(selected_hitbox);

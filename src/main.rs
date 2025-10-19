@@ -66,6 +66,11 @@ pub fn main() {
             game_config.render.canvas.present();
         } else if !pause_switch {
             pause_switch = true;
+
+            // Creating the overlay
+            // game_config
+            //     .broadcaster
+            //     .log("Game pause", MessageType::Setting);
             game_config.create_pause_overlay();
 
             // Render the drawn picture to the screen

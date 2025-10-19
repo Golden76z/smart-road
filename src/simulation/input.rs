@@ -30,7 +30,6 @@ impl<'a> GameSettings<'a> {
                     match k {
                         // Closing the programm when Escape key is pressed
                         Keycode::P => {
-                            self.broadcaster.log("Game pause", MessageType::Setting);
                             self.controller.pause_switch();
                             Ok(())
                         }

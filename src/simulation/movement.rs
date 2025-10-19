@@ -18,9 +18,6 @@ impl<'a> GameSettings<'a> {
             let mut queue = vehicle_lane.lock().unwrap();
 
             queue.retain_mut(|vehicle| {
-                // Updating position with vehicle velocity
-                vehicle.update_position(delta_time);
-
                 // Checking if the vehicles should turn left or right
                 if vehicle.should_turn() && !vehicle.has_turned {
                     vehicle.turning();
@@ -43,6 +40,9 @@ impl<'a> GameSettings<'a> {
                 if let Some(hitbox) = vehicle.hitbox {
                     hitbox_vec.push((vehicle.id, hitbox));
                 }
+
+                // Updating position with vehicle velocity
+                vehicle.update_position(delta_time);
 
                 !reached
             });

@@ -48,7 +48,10 @@ impl<'a> GameSettings<'a> {
                     HitboxType::Medium => {
                         self.render.canvas.set_draw_color(Color::RGB(255, 255, 0))
                     }
-                    HitboxType::Small => self.render.canvas.set_draw_color(Color::RGB(255, 128, 0)),
+                    HitboxType::Small => self.render.canvas.set_draw_color(Color::RGB(255, 160, 0)),
+                    HitboxType::VerySmall => {
+                        self.render.canvas.set_draw_color(Color::RGB(255, 80, 0))
+                    }
                     HitboxType::Stop => self.render.canvas.set_draw_color(Color::RGB(255, 0, 0)),
                 }
                 self.render.canvas.draw_rect(vehicle.hitbox.unwrap());
