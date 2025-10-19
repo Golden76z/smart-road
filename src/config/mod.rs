@@ -14,6 +14,6 @@ pub use constants::*;
 pub use game_settings::*;
 pub use keyboard::*;
 pub use spawn_manager::*;
-pub use statistics::*;
+// pub use statistics::*;
 pub use types::*;
 pub use ui::*;

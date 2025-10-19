@@ -2,7 +2,7 @@ use sdl2::{
     image::LoadTexture, pixels::Color, rect::Rect, render::TextureCreator, video::WindowContext,
 };
 
-use crate::config::{GameSettings, HitboxType, Lane, VEHICLE_HEIGHT, VEHICLE_WIDTH};
+use crate::config::{GameSettings, HitboxType, VEHICLE_HEIGHT, VEHICLE_WIDTH};
 
 impl<'a> GameSettings<'a> {
     pub fn render_vehicles(&mut self, texture_creator: &TextureCreator<WindowContext>) {
@@ -21,7 +21,7 @@ impl<'a> GameSettings<'a> {
                 .unwrap(),
         ];
 
-        for ((lane, dir), vehicle_lane) in &self.lanes.lanes {
+        for ((_, _), vehicle_lane) in &self.lanes.lanes {
             let queue = vehicle_lane.lock().unwrap();
 
             for vehicle in queue.iter() {
@@ -54,7 +54,10 @@ impl<'a> GameSettings<'a> {
                     }
                     HitboxType::Stop => self.render.canvas.set_draw_color(Color::RGB(255, 0, 0)),
                 }
-                self.render.canvas.draw_rect(vehicle.hitbox.unwrap());
+                self.render
+                    .canvas
+                    .draw_rect(vehicle.hitbox.unwrap())
+                    .expect("Error drawing vehicle hitbox");
             }
         }
     }
