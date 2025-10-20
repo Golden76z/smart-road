@@ -10,7 +10,7 @@ impl<'a> GameSettings<'a> {
         let delta_time = now.duration_since(self.time_tracker).as_secs_f32();
         self.time_tracker = now;
 
-        let mut hitbox_vec: Vec<(i16, Rect)> = Vec::new();
+        let mut hitbox_vec: Vec<(i16, (Rect, Rect))> = Vec::new();
 
         // Ranging over the TrafficLane struct containing all the vehicles
         for ((_, _), vehicle_lane) in &self.lanes.lanes {
@@ -37,8 +37,8 @@ impl<'a> GameSettings<'a> {
                 vehicle.adapt_velocity();
 
                 // Add this vehicle's hitbox to the processed list for next vehicles to check
-                if let Some(hitbox) = vehicle.hitbox {
-                    hitbox_vec.push((vehicle.id, hitbox));
+                if let (Some(hitbox1), Some(hitbox2)) = vehicle.hitbox {
+                    hitbox_vec.push((vehicle.id, (hitbox1, hitbox2)));
                 }
 
                 // Updating position with vehicle velocity

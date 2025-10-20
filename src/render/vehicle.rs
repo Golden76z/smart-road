@@ -31,6 +31,7 @@ impl<'a> GameSettings<'a> {
                 // Draw car at its coordinates
                 let dest = Rect::new(x as i32, y as i32, VEHICLE_WIDTH, VEHICLE_HEIGHT);
 
+                // Rendering the vehicle texture
                 self.render
                     .canvas
                     .copy_ex(
@@ -43,6 +44,8 @@ impl<'a> GameSettings<'a> {
                         false,
                     )
                     .unwrap();
+
+                // Changing the drawing color depending on the hitbox size
                 match vehicle.hitbox_type {
                     HitboxType::Big => self.render.canvas.set_draw_color(Color::RGB(0, 255, 0)),
                     HitboxType::Medium => {
@@ -54,10 +57,14 @@ impl<'a> GameSettings<'a> {
                     }
                     HitboxType::Stop => self.render.canvas.set_draw_color(Color::RGB(255, 0, 0)),
                 }
-                self.render
-                    .canvas
-                    .draw_rect(vehicle.hitbox.unwrap())
-                    .expect("Error drawing vehicle hitbox");
+
+                // Rendering the 1 or 2 parts of the vehicle hitbox
+                for rect in [&vehicle.hitbox.0, &vehicle.hitbox.1].into_iter().flatten() {
+                    self.render
+                        .canvas
+                        .draw_rect(*rect)
+                        .expect("Error drawing hitbox");
+                }
             }
         }
     }
