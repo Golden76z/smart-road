@@ -11,7 +11,7 @@ use crate::{
 
 impl Vehicle {
     // Method to create an hitbox for the vehicle
-    pub fn create_hitbox(&mut self, hitboxes: &Vec<(i16, (Rect, Rect))>) {
+    pub fn create_hitbox(&mut self, hitboxes: &Vec<(i16, (Option<Rect>, Option<Rect>))>) {
         let rotation: f64;
         let mut offset: i32 = 0;
 

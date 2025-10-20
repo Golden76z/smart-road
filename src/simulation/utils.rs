@@ -234,11 +234,31 @@ impl Vehicle {
     }
 }
 
-// Helper function to check intersection safely
-pub fn intersects_any(rect_opt: &Option<Rect>, other_hitbox1: &Rect, other_hitbox2: &Rect) -> bool {
+// // Helper function to check intersection safely
+// pub fn intersects_any(rect_opt: &Option<Rect>, other_hitbox1: &Rect, other_hitbox2: &Rect) -> bool {
+//     if let Some(r) = rect_opt {
+//         rects_intersect(r, other_hitbox1) || rects_intersect(r, other_hitbox2)
+//     } else {
+//         false
+//     }
+// }
+
+pub fn intersects_any(
+    rect_opt: &Option<Rect>,
+    other_hitbox1: &Option<Rect>,
+    other_hitbox2: &Option<Rect>,
+) -> bool {
     if let Some(r) = rect_opt {
-        rects_intersect(r, other_hitbox1) || rects_intersect(r, other_hitbox2)
-    } else {
-        false
+        if let Some(o1) = other_hitbox1 {
+            if rects_intersect(r, o1) {
+                return true;
+            }
+        }
+        if let Some(o2) = other_hitbox2 {
+            if rects_intersect(r, o2) {
+                return true;
+            }
+        }
     }
+    false
 }
