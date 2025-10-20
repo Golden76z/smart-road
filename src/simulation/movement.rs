@@ -12,6 +12,13 @@ impl<'a> GameSettings<'a> {
 
         let mut hitbox_vec: Vec<(i16, (Option<Rect>, Option<Rect>))> = Vec::new();
 
+        for ((_, _), vehicle_lane) in &self.lanes.lanes {
+            let queue = vehicle_lane.lock().unwrap(); // read-only lock here
+            for vehicle in queue.iter() {
+                hitbox_vec.push((vehicle.id, vehicle.hitbox));
+            }
+        }
+
         // Ranging over the TrafficLane struct containing all the vehicles
         for ((_, _), vehicle_lane) in &self.lanes.lanes {
             // Lock the VecDeque<Vehicle>
@@ -36,9 +43,6 @@ impl<'a> GameSettings<'a> {
                 // Adapt velocity depending on the hitbox
                 vehicle.adapt_velocity();
 
-                // Add this vehicle's hitbox to the processed list for next vehicles to check
-
-                hitbox_vec.push((vehicle.id, (vehicle.hitbox.0, vehicle.hitbox.1)));
                 // println!("Number of hitboxes: {:?}", hitbox_vec.len());
 
                 // Updating position with vehicle velocity
