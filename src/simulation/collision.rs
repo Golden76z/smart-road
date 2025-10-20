@@ -6,7 +6,7 @@ use crate::{
         DESTINATION_LEFT_WEST, DESTINATION_RIGHT_EAST, DESTINATION_RIGHT_WEST, DESTINATION_UP_EAST,
         DESTINATION_UP_WEST, Direction, HitboxType, Lane,
     },
-    simulation::{Vehicle, intersects_any, rects_intersect, rotated_rect},
+    simulation::{Vehicle, intersects_any},
 };
 
 impl Vehicle {
@@ -102,15 +102,11 @@ impl Vehicle {
             },
         }
         // Generate all possible hitbox combinations based on rotation
-        let hitbox_vec: Vec<(Option<Rect>, Option<Rect>)> = rotated_rect(
-            (self.coordinates.0, self.coordinates.1),
-            offset,
-            self.direction,
-            rotation,
-        );
+        let hitbox_vec: Vec<(Option<Rect>, Option<Rect>)> =
+            self.rotated_rect((self.coordinates.0, self.coordinates.1), offset, rotation);
 
         // Default to the first hitbox (fallback)
-        let mut selected_hitbox = hitbox_vec[0];
+        let mut selected_hitbox = hitbox_vec[4];
 
         // Try each possible hitbox
         'hitbox_loop: for (first, second) in &hitbox_vec {

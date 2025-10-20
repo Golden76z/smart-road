@@ -40,6 +40,7 @@ impl<'a> GameSettings<'a> {
                 if let (Some(hitbox1), Some(hitbox2)) = vehicle.hitbox {
                     hitbox_vec.push((vehicle.id, (hitbox1, hitbox2)));
                 }
+                // println!("Number of hitboxes: {:?}", hitbox_vec.len());
 
                 // Updating position with vehicle velocity
                 vehicle.update_position(delta_time);
