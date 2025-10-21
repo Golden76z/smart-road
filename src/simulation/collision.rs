@@ -106,7 +106,7 @@ impl Vehicle {
             self.rotated_rect((self.coordinates.0, self.coordinates.1), offset, rotation);
 
         // Default to the first hitbox (fallback)
-        let mut selected_hitbox = hitbox_vec[4];
+        let mut selected_hitbox = hitbox_vec[5];
 
         // Try each possible hitbox
         'hitbox_loop: for (first, second) in &hitbox_vec {
@@ -139,7 +139,8 @@ impl Vehicle {
             Some(1) => self.hitbox_type = HitboxType::Medium,
             Some(2) => self.hitbox_type = HitboxType::Small,
             Some(3) => self.hitbox_type = HitboxType::VerySmall,
-            Some(4) => self.hitbox_type = HitboxType::Stop,
+            Some(4) => self.hitbox_type = HitboxType::AlmostStop,
+            Some(5) => self.hitbox_type = HitboxType::Stop,
             _ => self.hitbox_type = HitboxType::Stop,
         }
 

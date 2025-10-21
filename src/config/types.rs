@@ -25,6 +25,7 @@ pub enum HitboxType {
     Medium,
     Small,
     VerySmall,
+    AlmostStop,
     Stop,
 }
 

@@ -1,7 +1,7 @@
 use crate::{
     config::{
-        BIG_HITBOX, Direction, MEDIUM_HITBOX, SMALL_HITBOX, STOP_HITBOX, VEHICLE_HEIGHT,
-        VEHICLE_WIDTH, VERY_SMALL_HITBOX,
+        ALMOST_STOP_HITBOX, BIG_HITBOX, Direction, MEDIUM_HITBOX, SMALL_HITBOX, STOP_HITBOX,
+        VEHICLE_HEIGHT, VEHICLE_WIDTH, VERY_SMALL_HITBOX,
     },
     simulation::Vehicle,
 };
@@ -29,6 +29,7 @@ impl Vehicle {
             MEDIUM_HITBOX,
             SMALL_HITBOX,
             VERY_SMALL_HITBOX,
+            ALMOST_STOP_HITBOX,
             STOP_HITBOX,
         ];
         // println!("{:?}", rotation);

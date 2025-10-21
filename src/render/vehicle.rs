@@ -51,9 +51,12 @@ impl<'a> GameSettings<'a> {
                     HitboxType::Medium => {
                         self.render.canvas.set_draw_color(Color::RGB(255, 255, 0))
                     }
-                    HitboxType::Small => self.render.canvas.set_draw_color(Color::RGB(255, 160, 0)),
+                    HitboxType::Small => self.render.canvas.set_draw_color(Color::RGB(255, 180, 0)),
                     HitboxType::VerySmall => {
-                        self.render.canvas.set_draw_color(Color::RGB(255, 80, 0))
+                        self.render.canvas.set_draw_color(Color::RGB(255, 120, 0))
+                    }
+                    HitboxType::AlmostStop => {
+                        self.render.canvas.set_draw_color(Color::RGB(255, 60, 0));
                     }
                     HitboxType::Stop => self.render.canvas.set_draw_color(Color::RGB(255, 0, 0)),
                 }
