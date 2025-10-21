@@ -26,13 +26,8 @@ pub fn main() {
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
+    let mut pause_switch = false;
     'game_loop: loop {
-        // renderer.canvas.clear();
-        game_config.render.canvas.clear();
-
-        // Creating the map textures
-        game_config.render.create_map();
-
         // Input listener - Vehicle spawning & rendering
         for event in event_pump.poll_iter() {
             match game_config.input_listener(event) {
@@ -44,24 +39,43 @@ pub fn main() {
             }
         }
 
-        // Update the vehicles positions
-        game_config.update_position();
+        if !game_config.controller.pause {
+            pause_switch = false;
+            game_config.render.canvas.clear();
 
-        // Render the vehicles
-        game_config.render_vehicles(&texture_creator);
+            // Creating the map textures
+            game_config.render.create_map();
 
-        // Drawing the overlays
-        game_config.create_overlay();
+            // Update the vehicles positions
+            game_config.update_position();
 
-        // Writing the debug info on the panel (if visible)
-        game_config.broadcaster.render(
-            &mut game_config.render.canvas,
-            &texture_creator,
-            &mut game_config.ui_state,
-        );
+            // Render the vehicles
+            game_config.render_vehicles(&texture_creator);
 
-        // Render the drawn picture to the screen
-        game_config.render.canvas.present();
+            // Drawing the overlays
+            game_config.create_overlay();
+
+            // Writing the debug info on the panel (if visible)
+            game_config.broadcaster.render(
+                &mut game_config.render.canvas,
+                &texture_creator,
+                &mut game_config.ui_state,
+            );
+
+            // Render the drawn picture to the screen
+            game_config.render.canvas.present();
+        } else if !pause_switch {
+            pause_switch = true;
+
+            // Creating the overlay
+            // game_config
+            //     .broadcaster
+            //     .log("Game pause", MessageType::Setting);
+            game_config.create_pause_overlay();
+
+            // Render the drawn picture to the screen
+            game_config.render.canvas.present();
+        }
 
         // Time between each loops - Frame rate
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / FPS));

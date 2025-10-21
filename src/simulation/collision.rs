@@ -2,190 +2,18 @@ use sdl2::rect::Rect;
 
 use crate::{
     config::{
-        BIG_HITBOX, Direction, HitboxType, Lane, MEDIUM_HITBOX, SMALL_HITBOX, STOP_HITBOX,
-        VELOCITY_FAST, VELOCITY_NORMAL, VELOCITY_SLOW,
+        DESTINATION_BOTTOM_EAST, DESTINATION_BOTTOM_WEST, DESTINATION_LEFT_EAST,
+        DESTINATION_LEFT_WEST, DESTINATION_RIGHT_EAST, DESTINATION_RIGHT_WEST, DESTINATION_UP_EAST,
+        DESTINATION_UP_WEST, Direction, HitboxType, Lane,
     },
-    simulation::{Vehicle, rects_intersect, rotated_rect},
+    simulation::{Vehicle, intersects_any},
 };
 
 impl Vehicle {
-    // Method to adapt the velocity to the hitbox
-    pub fn adapt_velocity(&mut self) {
-        match self.lane {
-            Lane::Up => match self.direction {
-                Direction::West => {
-                    if self.has_turned {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (VELOCITY_FAST, 0),
-                            HitboxType::Medium => self.velocity = (VELOCITY_NORMAL, 0),
-                            HitboxType::Small => self.velocity = (VELOCITY_SLOW, 0),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    } else {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (0, VELOCITY_FAST),
-                            HitboxType::Medium => self.velocity = (0, VELOCITY_NORMAL),
-                            HitboxType::Small => self.velocity = (0, VELOCITY_SLOW),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    }
-                }
-                Direction::Forward => match self.hitbox_type {
-                    HitboxType::Big => self.velocity = (0, VELOCITY_FAST),
-                    HitboxType::Medium => self.velocity = (0, VELOCITY_NORMAL),
-                    HitboxType::Small => self.velocity = (0, VELOCITY_SLOW),
-                    HitboxType::Stop => self.velocity = (0, 0),
-                },
-                Direction::East => {
-                    if self.has_turned {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (-VELOCITY_FAST, 0),
-                            HitboxType::Medium => self.velocity = (-VELOCITY_NORMAL, 0),
-                            HitboxType::Small => self.velocity = (-VELOCITY_SLOW, 0),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    } else {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (0, VELOCITY_FAST),
-                            HitboxType::Medium => self.velocity = (0, VELOCITY_NORMAL),
-                            HitboxType::Small => self.velocity = (0, VELOCITY_SLOW),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    }
-                }
-            },
-            Lane::Bottom => match self.direction {
-                Direction::West => {
-                    if self.has_turned {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (-VELOCITY_FAST, 0),
-                            HitboxType::Medium => self.velocity = (-VELOCITY_NORMAL, 0),
-                            HitboxType::Small => self.velocity = (-VELOCITY_SLOW, 0),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    } else {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (0, -VELOCITY_FAST),
-                            HitboxType::Medium => self.velocity = (0, -VELOCITY_NORMAL),
-                            HitboxType::Small => self.velocity = (0, -VELOCITY_SLOW),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    }
-                }
-                Direction::Forward => match self.hitbox_type {
-                    HitboxType::Big => self.velocity = (0, -VELOCITY_FAST),
-                    HitboxType::Medium => self.velocity = (0, -VELOCITY_NORMAL),
-                    HitboxType::Small => self.velocity = (0, -VELOCITY_SLOW),
-                    HitboxType::Stop => self.velocity = (0, 0),
-                },
-                Direction::East => {
-                    if self.has_turned {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (VELOCITY_FAST, 0),
-                            HitboxType::Medium => self.velocity = (VELOCITY_NORMAL, 0),
-                            HitboxType::Small => self.velocity = (VELOCITY_SLOW, 0),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    } else {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (0, -VELOCITY_FAST),
-                            HitboxType::Medium => self.velocity = (0, -VELOCITY_NORMAL),
-                            HitboxType::Small => self.velocity = (0, -VELOCITY_SLOW),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    }
-                }
-            },
-            Lane::Left => match self.direction {
-                Direction::West => {
-                    if self.has_turned {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (0, -VELOCITY_FAST),
-                            HitboxType::Medium => self.velocity = (0, -VELOCITY_NORMAL),
-                            HitboxType::Small => self.velocity = (0, -VELOCITY_SLOW),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    } else {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (VELOCITY_FAST, 0),
-                            HitboxType::Medium => self.velocity = (VELOCITY_NORMAL, 0),
-                            HitboxType::Small => self.velocity = (VELOCITY_SLOW, 0),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    }
-                }
-                Direction::Forward => match self.hitbox_type {
-                    HitboxType::Big => self.velocity = (VELOCITY_FAST, 0),
-                    HitboxType::Medium => self.velocity = (VELOCITY_NORMAL, 0),
-                    HitboxType::Small => self.velocity = (VELOCITY_SLOW, 0),
-                    HitboxType::Stop => self.velocity = (0, 0),
-                },
-                Direction::East => {
-                    if self.has_turned {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (0, VELOCITY_FAST),
-                            HitboxType::Medium => self.velocity = (0, VELOCITY_NORMAL),
-                            HitboxType::Small => self.velocity = (0, VELOCITY_SLOW),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    } else {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (VELOCITY_FAST, 0),
-                            HitboxType::Medium => self.velocity = (VELOCITY_NORMAL, 0),
-                            HitboxType::Small => self.velocity = (VELOCITY_SLOW, 0),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    }
-                }
-            },
-            Lane::Right => match self.direction {
-                Direction::West => {
-                    if self.has_turned {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (0, VELOCITY_FAST),
-                            HitboxType::Medium => self.velocity = (0, VELOCITY_NORMAL),
-                            HitboxType::Small => self.velocity = (0, VELOCITY_SLOW),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    } else {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (-VELOCITY_FAST, 0),
-                            HitboxType::Medium => self.velocity = (-VELOCITY_NORMAL, 0),
-                            HitboxType::Small => self.velocity = (-VELOCITY_SLOW, 0),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    }
-                }
-                Direction::Forward => match self.hitbox_type {
-                    HitboxType::Big => self.velocity = (-VELOCITY_FAST, 0),
-                    HitboxType::Medium => self.velocity = (-VELOCITY_NORMAL, 0),
-                    HitboxType::Small => self.velocity = (-VELOCITY_SLOW, 0),
-                    HitboxType::Stop => self.velocity = (0, 0),
-                },
-                Direction::East => {
-                    if self.has_turned {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (0, -VELOCITY_FAST),
-                            HitboxType::Medium => self.velocity = (0, -VELOCITY_NORMAL),
-                            HitboxType::Small => self.velocity = (0, -VELOCITY_SLOW),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    } else {
-                        match self.hitbox_type {
-                            HitboxType::Big => self.velocity = (-VELOCITY_FAST, 0),
-                            HitboxType::Medium => self.velocity = (-VELOCITY_NORMAL, 0),
-                            HitboxType::Small => self.velocity = (-VELOCITY_SLOW, 0),
-                            HitboxType::Stop => self.velocity = (0, 0),
-                        }
-                    }
-                }
-            },
-        }
-    }
-
     // Method to create an hitbox for the vehicle
-    pub fn create_hitbox(&mut self, hitboxes: &Vec<(i16, Rect)>) {
+    pub fn create_hitbox(&mut self, hitboxes: &Vec<(i16, (Option<Rect>, Option<Rect>))>) {
         let rotation: f64;
+        let mut offset: i32 = 0;
 
         match self.lane {
             Lane::Up => match self.direction {
@@ -194,6 +22,7 @@ impl Vehicle {
                         rotation = 0.0;
                     } else {
                         rotation = 90.0;
+                        offset = (DESTINATION_UP_WEST.1 - self.coordinates.1).abs();
                     }
                 }
                 Direction::Forward => {
@@ -204,6 +33,7 @@ impl Vehicle {
                         rotation = 180.0;
                     } else {
                         rotation = 90.0;
+                        offset = (DESTINATION_UP_EAST.1 - self.coordinates.1).abs();
                     }
                 }
             },
@@ -213,6 +43,7 @@ impl Vehicle {
                         rotation = 180.0;
                     } else {
                         rotation = 270.0;
+                        offset = (DESTINATION_BOTTOM_WEST.1 - self.coordinates.1).abs();
                     }
                 }
                 Direction::Forward => {
@@ -223,6 +54,7 @@ impl Vehicle {
                         rotation = 0.0;
                     } else {
                         rotation = 270.0;
+                        offset = (DESTINATION_BOTTOM_EAST.1 - self.coordinates.1).abs();
                     }
                 }
             },
@@ -232,6 +64,7 @@ impl Vehicle {
                         rotation = 270.0;
                     } else {
                         rotation = 0.0;
+                        offset = (DESTINATION_LEFT_WEST.0 - self.coordinates.0).abs();
                     }
                 }
                 Direction::Forward => {
@@ -242,6 +75,7 @@ impl Vehicle {
                         rotation = 90.0;
                     } else {
                         rotation = 0.0;
+                        offset = (DESTINATION_LEFT_EAST.0 - self.coordinates.0).abs();
                     }
                 }
             },
@@ -251,6 +85,7 @@ impl Vehicle {
                         rotation = 90.0;
                     } else {
                         rotation = 180.0;
+                        offset = (DESTINATION_RIGHT_WEST.0 - self.coordinates.0).abs();
                     }
                 }
                 Direction::Forward => {
@@ -261,52 +96,55 @@ impl Vehicle {
                         rotation = 270.0;
                     } else {
                         rotation = 180.0;
+                        offset = (DESTINATION_RIGHT_EAST.0 - self.coordinates.0).abs();
                     }
                 }
             },
         }
+        // Generate all possible hitbox combinations based on rotation
+        let hitbox_vec: Vec<(Option<Rect>, Option<Rect>)> =
+            self.rotated_rect((self.coordinates.0, self.coordinates.1), offset, rotation);
 
-        // Getting the vec of rect with different hitboxes depending on the angle
-        let hitbox_vec: Vec<Rect> =
-            rotated_rect((self.coordinates.0, self.coordinates.1), rotation);
-        let mut selected_hitbox: Rect = hitbox_vec[0];
+        // Default to the first hitbox (fallback)
+        let mut selected_hitbox = hitbox_vec[5];
 
-        // println!("{:?}", hitbox_vec);
-
-        // Checking one by one which one will be assigned to the vehicle
-        'hitbox_loop: for candidate_hitbox in &hitbox_vec {
+        // Try each possible hitbox
+        'hitbox_loop: for (first, second) in &hitbox_vec {
             let mut has_collision = false;
 
-            // Check against already processed vehicles
-            for (other_id, other_hitbox) in hitboxes {
-                // Skip checking against self (shouldn't happen, but just in case)
+            // Compare against all existing hitboxes
+            for (other_id, (other_hitbox1, other_hitbox2)) in hitboxes {
                 if *other_id == self.id {
-                    continue;
+                    continue; // skip self
                 }
 
-                // Check if hitboxes overlap
-                if rects_intersect(candidate_hitbox, other_hitbox) {
+                if intersects_any(first, other_hitbox1, other_hitbox2)
+                    || intersects_any(second, other_hitbox1, other_hitbox2)
+                {
                     has_collision = true;
                     break;
                 }
             }
 
-            // If no collision found, use this hitbox
+            // Use the first hitbox configuration that doesn’t collide
             if !has_collision {
-                selected_hitbox = *candidate_hitbox;
+                selected_hitbox = (*first, *second);
                 break 'hitbox_loop;
             }
         }
 
-        // Find which index in hitbox_vec was selected
+        // Determine hitbox type based on index
         match hitbox_vec.iter().position(|&h| h == selected_hitbox) {
             Some(0) => self.hitbox_type = HitboxType::Big,
             Some(1) => self.hitbox_type = HitboxType::Medium,
             Some(2) => self.hitbox_type = HitboxType::Small,
-            Some(3) => self.hitbox_type = HitboxType::Stop,
-            _ => self.hitbox_type = HitboxType::Big,
+            Some(3) => self.hitbox_type = HitboxType::VerySmall,
+            Some(4) => self.hitbox_type = HitboxType::AlmostStop,
+            Some(5) => self.hitbox_type = HitboxType::Stop,
+            _ => self.hitbox_type = HitboxType::Stop,
         }
 
-        self.hitbox = Some(selected_hitbox);
+        // Assign final hitbox (still as Option<Rect>)
+        self.hitbox = (selected_hitbox.0, selected_hitbox.1);
     }
 }

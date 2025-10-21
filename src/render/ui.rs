@@ -59,4 +59,17 @@ impl<'a> GameSettings<'a> {
                 .expect("Error generating the debug overlay");
         }
     }
+
+    pub fn create_pause_overlay(&mut self) {
+        let texture_creator = self.render.canvas.texture_creator();
+
+        let pause_overlay = texture_creator
+            .load_texture("../../assets/images/overlay/pause_overlay.png")
+            .unwrap();
+
+        self.render
+            .canvas
+            .copy(&pause_overlay, None, None)
+            .expect("Error generating the pause overlay");
+    }
 }

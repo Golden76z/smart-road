@@ -1,6 +1,5 @@
-use sdl2::{image::LoadTexture, rect::Point, rect::Rect, render::Texture};
-
 use crate::render::renderer::Renderer;
+use sdl2::{image::LoadTexture, rect::Point, rect::Rect, render::Texture};
 
 impl Renderer {
     fn draw_rotated(

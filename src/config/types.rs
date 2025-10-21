@@ -24,6 +24,8 @@ pub enum HitboxType {
     Big,
     Medium,
     Small,
+    VerySmall,
+    AlmostStop,
     Stop,
 }
 
@@ -59,6 +61,6 @@ impl TrafficLanes {
     pub fn insert_vehicle(&mut self, lane: Lane, direction: Direction, vehicle: Vehicle) {
         let queue = self.lane(lane, direction);
         let mut q = queue.lock().unwrap();
-        q.push_front(vehicle);
+        q.push_back(vehicle);
     }
 }

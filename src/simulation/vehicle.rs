@@ -18,7 +18,7 @@ pub struct Vehicle {
     pub direction: Direction,
     pub has_turned: bool,
     pub sprite_angle: f64,
-    pub hitbox: Option<Rect>,
+    pub hitbox: (Option<Rect>, Option<Rect>),
     pub hitbox_type: HitboxType,
     pub velocity: (i32, i32),
     pub color: u8,
@@ -88,7 +88,7 @@ impl Vehicle {
                 direction: direction,
                 has_turned: false,
                 sprite_angle: sprite_angle,
-                hitbox: Some(Rect::new(0, 0, 0, 0)),
+                hitbox: (None, None),
                 hitbox_type: HitboxType::Stop,
                 velocity: velocity,
                 color: rand_num,
@@ -154,10 +154,12 @@ impl Vehicle {
         match self.lane {
             Lane::Up => match self.direction {
                 Direction::West => {
+                    self.coordinates = (self.coordinates.0, DESTINATION_UP_WEST.1);
                     self.velocity = (VELOCITY_NORMAL, 0);
                     self.sprite_angle = 90.0
                 }
                 Direction::East => {
+                    self.coordinates = (self.coordinates.0, DESTINATION_UP_EAST.1);
                     self.velocity = (-VELOCITY_NORMAL, 0);
                     self.sprite_angle = 270.0
                 }
@@ -165,10 +167,12 @@ impl Vehicle {
             },
             Lane::Bottom => match self.direction {
                 Direction::West => {
+                    self.coordinates = (self.coordinates.0, DESTINATION_BOTTOM_WEST.1);
                     self.velocity = (-VELOCITY_NORMAL, 0);
                     self.sprite_angle = 270.0
                 }
                 Direction::East => {
+                    self.coordinates = (self.coordinates.0, DESTINATION_BOTTOM_EAST.1);
                     self.velocity = (VELOCITY_NORMAL, 0);
                     self.sprite_angle = 90.0
                 }
@@ -176,10 +180,12 @@ impl Vehicle {
             },
             Lane::Left => match self.direction {
                 Direction::West => {
+                    self.coordinates = (DESTINATION_LEFT_WEST.0, self.coordinates.1);
                     self.velocity = (0, -VELOCITY_NORMAL);
                     self.sprite_angle = 0.0
                 }
                 Direction::East => {
+                    self.coordinates = (DESTINATION_LEFT_EAST.0, self.coordinates.1);
                     self.velocity = (0, VELOCITY_NORMAL);
                     self.sprite_angle = 180.0
                 }
@@ -187,10 +193,12 @@ impl Vehicle {
             },
             Lane::Right => match self.direction {
                 Direction::West => {
+                    self.coordinates = (DESTINATION_RIGHT_WEST.0, self.coordinates.1);
                     self.velocity = (0, VELOCITY_NORMAL);
                     self.sprite_angle = 180.0
                 }
                 Direction::East => {
+                    self.coordinates = (DESTINATION_RIGHT_EAST.0, self.coordinates.1);
                     self.velocity = (0, -VELOCITY_NORMAL);
                     self.sprite_angle = 0.0
                 }

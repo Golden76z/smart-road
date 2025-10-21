@@ -100,7 +100,7 @@ impl<'a> GameSettings<'a> {
             .expect("Error");
 
         // Rendering the random mode keybinds
-        if self.controller.random {
+        if self.controller.mode == Mode::Random {
             self.render
                 .canvas
                 .copy(&random_key_down, None, Rect::new(1070, 145, 50, 50))
@@ -114,7 +114,7 @@ impl<'a> GameSettings<'a> {
 
         if self
             .spawn_manager
-            .is_key_pressed_random(Mode::random, ArrowKey::Up)
+            .is_key_pressed_random(Mode::Random, ArrowKey::Up)
         {
             self.render
                 .canvas
@@ -129,7 +129,7 @@ impl<'a> GameSettings<'a> {
 
         if self
             .spawn_manager
-            .is_key_pressed_random(Mode::random, ArrowKey::Left)
+            .is_key_pressed_random(Mode::Random, ArrowKey::Left)
         {
             self.render
                 .canvas
@@ -144,7 +144,7 @@ impl<'a> GameSettings<'a> {
 
         if self
             .spawn_manager
-            .is_key_pressed_random(Mode::random, ArrowKey::Down)
+            .is_key_pressed_random(Mode::Random, ArrowKey::Down)
         {
             self.render
                 .canvas
@@ -159,7 +159,7 @@ impl<'a> GameSettings<'a> {
 
         if self
             .spawn_manager
-            .is_key_pressed_random(Mode::random, ArrowKey::Right)
+            .is_key_pressed_random(Mode::Random, ArrowKey::Right)
         {
             self.render
                 .canvas
@@ -173,7 +173,7 @@ impl<'a> GameSettings<'a> {
         }
 
         // Rendering the manual keybinds
-        if self.controller.manual {
+        if self.controller.mode == Mode::Manual {
             self.render
                 .canvas
                 .copy(&manual_key_down, None, Rect::new(1070, 305, 50, 50))
