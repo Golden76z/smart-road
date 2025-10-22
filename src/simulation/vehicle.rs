@@ -2,21 +2,22 @@ use crate::config::{
     DESTINATION_BOTTOM_EAST, DESTINATION_BOTTOM_FORWARD, DESTINATION_BOTTOM_WEST,
     DESTINATION_LEFT_EAST, DESTINATION_LEFT_FORWARD, DESTINATION_LEFT_WEST, DESTINATION_RIGHT_EAST,
     DESTINATION_RIGHT_FORWARD, DESTINATION_RIGHT_WEST, DESTINATION_UP_EAST, DESTINATION_UP_FORWARD,
-    DESTINATION_UP_WEST, Direction, GameSettings, HitboxType, Lane, MessageType, SPAWN_BOTTOM_EAST,
-    SPAWN_BOTTOM_FORWARD, SPAWN_BOTTOM_WEST, SPAWN_LEFT_EAST, SPAWN_LEFT_FORWARD, SPAWN_LEFT_WEST,
-    SPAWN_RIGHT_EAST, SPAWN_RIGHT_FORWARD, SPAWN_RIGHT_WEST, SPAWN_UP_EAST, SPAWN_UP_FORWARD,
-    SPAWN_UP_WEST, VELOCITY_NORMAL,
+    DESTINATION_UP_WEST, Direction, GameSettings, HitboxType, Lane, MessageType, SAFE_DISTANCE,
+    SPAWN_BOTTOM_EAST, SPAWN_BOTTOM_FORWARD, SPAWN_BOTTOM_WEST, SPAWN_LEFT_EAST,
+    SPAWN_LEFT_FORWARD, SPAWN_LEFT_WEST, SPAWN_RIGHT_EAST, SPAWN_RIGHT_FORWARD, SPAWN_RIGHT_WEST,
+    SPAWN_UP_EAST, SPAWN_UP_FORWARD, SPAWN_UP_WEST, TrafficLanes, VELOCITY_NORMAL,
 };
 use rand::prelude::*;
 use sdl2::rect::Rect;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Vehicle {
     pub id: i16,
     pub coordinates: (i32, i32),
     pub lane: Lane,
     pub direction: Direction,
     pub has_turned: bool,
+    pub distance_traveled: f64,
     pub sprite_angle: f64,
     pub hitbox: (Option<Rect>, Option<Rect>),
     pub hitbox_type: HitboxType,
@@ -87,6 +88,7 @@ impl Vehicle {
                 lane: lane,
                 direction: direction,
                 has_turned: false,
+                distance_traveled: 0.0,
                 sprite_angle: sprite_angle,
                 hitbox: (None, None),
                 hitbox_type: HitboxType::Stop,
@@ -114,11 +116,25 @@ impl Vehicle {
         };
     }
 
-    pub fn update_position(&mut self, delta_time: f32) {
-        self.coordinates.0 =
-            (self.coordinates.0 as f32 + self.velocity.0 as f32 * delta_time) as i32;
-        self.coordinates.1 =
-            (self.coordinates.1 as f32 + self.velocity.1 as f32 * delta_time) as i32;
+    pub fn update_position(&mut self, delta_time: f32, last_vehicle: &Option<Vehicle>) {
+        let can_spawn: bool = true;
+        // if last_vehicle != None {
+        self.distance_traveled += ((self.velocity.0 as f32 * delta_time) as f64
+            + (self.velocity.1 as f32 * delta_time) as f64)
+            .abs();
+        // let test = last_vehicle.clone().unwrap();
+        // println!("test: {:?}", test.distance_traveled);
+        // let temp = test.distance_traveled - self.distance_traveled;
+        // if temp < SAFE_DISTANCE {
+        //     can_spawn = false;
+        // }
+        // }
+        if can_spawn {
+            self.coordinates.0 =
+                (self.coordinates.0 as f32 + self.velocity.0 as f32 * delta_time) as i32;
+            self.coordinates.1 =
+                (self.coordinates.1 as f32 + self.velocity.1 as f32 * delta_time) as i32;
+        }
     }
 
     // Comparing coordinates with destination to check if the vehicle should turn or not

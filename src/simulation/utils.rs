@@ -60,9 +60,9 @@ impl Vehicle {
                             )),
                             Some(Rect::new(
                                 coordinates.0 + offset,
-                                coordinates.1 - (*hitbox - VEHICLE_HEIGHT) as i32 + offset,
+                                coordinates.1 - *hitbox as i32 + offset,
                                 VEHICLE_WIDTH,
-                                *hitbox - offset as u32,
+                                VEHICLE_HEIGHT + (*hitbox - offset as u32),
                             )),
                         ));
                     } else if self.direction == Direction::East {
@@ -77,7 +77,7 @@ impl Vehicle {
                                 coordinates.0 + offset,
                                 coordinates.1,
                                 VEHICLE_WIDTH,
-                                *hitbox - offset as u32,
+                                VEHICLE_HEIGHT + *hitbox - offset as u32,
                             )),
                         ));
                     }
@@ -108,7 +108,7 @@ impl Vehicle {
                             Some(Rect::new(
                                 coordinates.0,
                                 coordinates.1 + *hitbox as i32 - (*hitbox as i32 - offset),
-                                *hitbox - offset as u32,
+                                VEHICLE_WIDTH + *hitbox - offset as u32,
                                 VEHICLE_HEIGHT,
                             )),
                         ));
@@ -121,9 +121,9 @@ impl Vehicle {
                                 *hitbox - (*hitbox - offset as u32),
                             )),
                             Some(Rect::new(
-                                coordinates.0 - (*hitbox as i32 - offset) + VEHICLE_WIDTH as i32,
+                                coordinates.0 - (*hitbox as i32 - offset),
                                 coordinates.1 + offset,
-                                *hitbox - offset as u32,
+                                VEHICLE_WIDTH + *hitbox - offset as u32,
                                 VEHICLE_HEIGHT,
                             )),
                         ));
@@ -157,7 +157,7 @@ impl Vehicle {
                                 coordinates.0 - offset,
                                 coordinates.1,
                                 VEHICLE_WIDTH,
-                                *hitbox - offset as u32,
+                                VEHICLE_HEIGHT + *hitbox - offset as u32,
                             )),
                         ));
                     } else {
@@ -171,9 +171,9 @@ impl Vehicle {
                             )),
                             Some(Rect::new(
                                 coordinates.0 - *hitbox as i32 + (*hitbox as i32 - offset),
-                                coordinates.1 - (*hitbox as i32 - offset) + VEHICLE_HEIGHT as i32,
+                                coordinates.1 - (*hitbox as i32 - offset),
                                 VEHICLE_WIDTH,
-                                *hitbox - offset as u32,
+                                VEHICLE_HEIGHT + *hitbox - offset as u32,
                             )),
                         ));
                     }
@@ -203,9 +203,9 @@ impl Vehicle {
                                 *hitbox - (*hitbox - offset as u32),
                             )),
                             Some(Rect::new(
-                                coordinates.0 + VEHICLE_WIDTH as i32 - (*hitbox as i32 - offset),
+                                coordinates.0 - (*hitbox as i32 - offset),
                                 coordinates.1 - offset,
-                                *hitbox - offset as u32,
+                                VEHICLE_WIDTH + *hitbox - offset as u32,
                                 VEHICLE_HEIGHT,
                             )),
                         ));
@@ -221,7 +221,7 @@ impl Vehicle {
                             Some(Rect::new(
                                 coordinates.0,
                                 coordinates.1 - offset,
-                                *hitbox - offset as u32,
+                                VEHICLE_WIDTH + *hitbox - offset as u32,
                                 VEHICLE_HEIGHT,
                             )),
                         ));

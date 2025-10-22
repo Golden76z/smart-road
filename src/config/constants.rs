@@ -4,7 +4,6 @@ pub const SCREEN_WIDTH: u32 = 1400;
 pub const MAP_WIDTH: u32 = 1000;
 pub const SCREEN_HEIGHT: u32 = 1000;
 pub const FPS: u32 = 60;
-// pub const PAUSE: bool = false;
 pub const SPAWN_OFFSET_X: u32 = SCREEN_WIDTH / 20;
 pub const SPAWN_OFFSET_Y: u32 = SCREEN_HEIGHT / 20;
 
@@ -23,7 +22,7 @@ pub const TILE_HEIGHT: u32 = SCREEN_HEIGHT / 20;
 
 pub const VEHICLE_WIDTH: u32 = TILE_WIDTH;
 pub const VEHICLE_HEIGHT: u32 = TILE_HEIGHT;
-// pub const SAFE_DISTANCE: u32 = 2 * VEHICLE_WIDTH;
+pub const SAFE_DISTANCE: f64 = (2 * VEHICLE_WIDTH) as f64;
 
 // Velocity - Pixels per second
 pub const VELOCITY_ALMOST_STOP: i32 = 30;
