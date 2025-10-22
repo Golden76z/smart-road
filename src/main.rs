@@ -49,6 +49,13 @@ pub fn main() {
             // Update the vehicles positions
             game_config.update_position();
 
+            // Detect close calls
+            game_config.statistics.detect_close_calls();
+
+            // Update live status lines so the debug panel shows current statistics in real time
+            let status_lines = game_config.statistics.as_lines();
+            game_config.broadcaster.set_status_lines(status_lines);
+
             // Render the vehicles
             game_config.render_vehicles(&texture_creator);
 
@@ -80,4 +87,6 @@ pub fn main() {
         // Time between each loops - Frame rate
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / FPS));
     }
+    // Affichage des statistiques à la sortie
+    game_config.print_statistics();
 }

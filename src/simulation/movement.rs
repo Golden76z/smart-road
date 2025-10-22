@@ -35,6 +35,18 @@ impl<'a> GameSettings<'a> {
                 if reached {
                     let msg = format!("Vehicle: {:?} has reached destination !", vehicle.id);
                     self.broadcaster.log(&msg, MessageType::Info);
+                    // Statistics: increment the number of vehicles that passed through the intersection
+                    self.statistics.record_vehicle_passed();
+                    // Statistics: record time spent in the intersection for this vehicle
+                    if let Some(stats) = self.statistics.vehicle_stats.get_mut(&vehicle.id) {
+                        if stats.exit_time.is_none() {
+                            stats.exit_time = Some(std::time::Instant::now());
+                            let entry = stats.entry_time;
+                            let time_in = entry.elapsed().as_secs_f32();
+                            self.statistics.update_max_time_in_intersection(time_in);
+                            self.statistics.update_min_time_in_intersection(time_in);
+                        }
+                    }
                 }
 
                 // Creating hitbox checking against already processed vehicles
@@ -43,10 +55,17 @@ impl<'a> GameSettings<'a> {
                 // Adapt velocity depending on the hitbox
                 vehicle.adapt_velocity();
 
-                // println!("Number of hitboxes: {:?}", hitbox_vec.len());
-
                 // Updating position with vehicle velocity
                 vehicle.update_position(delta_time);
+
+                // Statistiques : record last position & scalar speed
+                if let Some(stats) = self.statistics.vehicle_stats.get_mut(&vehicle.id) {
+                    stats.positions.push(vehicle.coordinates);
+                    let speed = ((vehicle.velocity.0.pow(2) + vehicle.velocity.1.pow(2)) as f32).sqrt() as i32;
+                    stats.velocities.push(speed);
+                    self.statistics.update_max_velocity(speed);
+                    self.statistics.update_min_velocity(speed);
+                }
 
                 !reached
             });
