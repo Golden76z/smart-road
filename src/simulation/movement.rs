@@ -23,8 +23,6 @@ impl<'a> GameSettings<'a> {
         for ((_, _), vehicle_lane) in &self.lanes.lanes {
             // Lock the VecDeque<Vehicle>
             let mut queue = vehicle_lane.lock().unwrap();
-            // let last_vehicle = queue.clone().pop_back();
-            let last_vehicle = queue.get(queue.len().saturating_sub(2)).cloned();
 
             queue.retain_mut(|vehicle| {
                 // Checking if the vehicles should turn left or right
@@ -48,7 +46,7 @@ impl<'a> GameSettings<'a> {
                 // println!("Number of hitboxes: {:?}", hitbox_vec.len());
 
                 // Updating position with vehicle velocity
-                vehicle.update_position(delta_time, &last_vehicle);
+                vehicle.update_position(delta_time);
 
                 !reached
             });
