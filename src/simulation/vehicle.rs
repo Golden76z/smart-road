@@ -18,6 +18,7 @@ pub struct Vehicle {
     pub lane: Lane,
     pub direction: Direction,
     pub has_turned: bool,
+    pub distance_traveled: f64,
     pub sprite_angle: f64,
     pub hitbox: (Option<Rect>, Option<Rect>),
     pub hitbox_type: HitboxType,
@@ -105,6 +106,7 @@ impl Vehicle {
                 lane: lane,
                 direction: direction,
                 has_turned: false,
+                distance_traveled: 0.0,
                 sprite_angle: sprite_angle,
                 hitbox: (None, None),
                 hitbox_type: HitboxType::Stop,
@@ -133,6 +135,10 @@ impl Vehicle {
     }
 
     pub fn update_position(&mut self, delta_time: f32) {
+        self.distance_traveled += ((self.velocity.0 as f32 * delta_time) as f64
+            + (self.velocity.1 as f32 * delta_time) as f64)
+            .abs();
+        // println!("{:?}", self.distance_traveled);
         self.coordinates.0 =
             (self.coordinates.0 as f32 + self.velocity.0 as f32 * delta_time) as i32;
         self.coordinates.1 =

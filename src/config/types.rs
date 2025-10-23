@@ -33,7 +33,6 @@ pub type VehicleLane = Arc<Mutex<VecDeque<Vehicle>>>;
 
 pub struct TrafficLanes {
     pub lanes: HashMap<(Lane, Direction), VehicleLane>,
-    // pub hitboxes: Vec<HitBox>,
 }
 
 impl TrafficLanes {
@@ -44,18 +43,50 @@ impl TrafficLanes {
                 lanes.insert((lane, dir), Arc::new(Mutex::new(VecDeque::new())));
             }
         }
-        Self {
-            lanes,
-            // hitboxes: Vec::new(),
-        }
+        Self { lanes }
     }
 
-    pub fn lane(&self, lane: Lane, dir: Direction) -> VehicleLane {
+    // Helper method to check if the Lane/Direction given exist
+    fn lane(&self, lane: Lane, dir: Direction) -> VehicleLane {
         self.lanes
             .get(&(lane, dir))
             .expect("Lane/Direction combination missing")
             .clone()
     }
+
+    // // Method to check if the safe distance is respected on same lane & direction
+    // pub fn safe_distance(&mut self, lane: Lane, direction: Direction) -> bool {
+    //     let lane = self
+    //         .lanes
+    //         .get(&(lane, direction))
+    //         .expect("Lane/Direction combination missing")
+    //         .clone();
+    //     let last_vehicle = lane.lock().unwrap().pop_back().unwrap().coordinates;
+    //     match lane {
+    //         Lane::Up => {
+    //             match direction {
+    //                 Direction::West => {
+    //
+    //                 },
+    //                 Direction::Forward => {
+    //
+    //                 },
+    //                 Direction::East => {
+    //
+    //                 }
+    //             }
+    //         },
+    //         Lane::Bottom => {
+    //
+    //         },
+    //         Lane::Left => {
+    //
+    //         },
+    //         Lane::Right => {
+    //
+    //         }
+    //     }
+    // }
 
     // Method to insert a new vehicle in the TrafficLane struct
     pub fn insert_vehicle(&mut self, lane: Lane, direction: Direction, vehicle: Vehicle) {

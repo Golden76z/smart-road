@@ -4,7 +4,6 @@ pub const SCREEN_WIDTH: u32 = 1400;
 pub const MAP_WIDTH: u32 = 1000;
 pub const SCREEN_HEIGHT: u32 = 1000;
 pub const FPS: u32 = 60;
-// pub const PAUSE: bool = false;
 pub const SPAWN_OFFSET_X: u32 = SCREEN_WIDTH / 20;
 pub const SPAWN_OFFSET_Y: u32 = SCREEN_HEIGHT / 20;
 
@@ -27,17 +26,17 @@ pub const SAFE_DISTANCE: u32 = 2 * VEHICLE_WIDTH;
 
 // Velocity - Pixels per second
 pub const VELOCITY_ALMOST_STOP: i32 = 30;
-pub const VELOCITY_SLOW: i32 = 60;
-pub const VELOCITY_VERY_SLOW: i32 = 90;
-pub const VELOCITY_NORMAL: i32 = 120;
-pub const VELOCITY_FAST: i32 = 160;
+pub const VELOCITY_SLOW: i32 = 80;
+pub const VELOCITY_VERY_SLOW: i32 = 120;
+pub const VELOCITY_NORMAL: i32 = 150;
+pub const VELOCITY_FAST: i32 = 200;
 
 // Hitboxes
-pub const BIG_HITBOX: u32 = 300;
-pub const MEDIUM_HITBOX: u32 = 230;
-pub const SMALL_HITBOX: u32 = 170;
+pub const BIG_HITBOX: u32 = 500;
+pub const MEDIUM_HITBOX: u32 = 350;
+pub const SMALL_HITBOX: u32 = 200;
 pub const VERY_SMALL_HITBOX: u32 = 120;
-pub const ALMOST_STOP_HITBOX: u32 = 55;
+pub const ALMOST_STOP_HITBOX: u32 = 51;
 pub const STOP_HITBOX: u32 = 50;
 
 // Spawn cooldown
