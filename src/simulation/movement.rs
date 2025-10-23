@@ -50,7 +50,7 @@ impl<'a> GameSettings<'a> {
                 }
 
                 // Creating hitbox checking against already processed vehicles
-                vehicle.create_hitbox(&hitbox_vec);
+                vehicle.create_hitbox(&mut self.spawn_manager, &hitbox_vec);
 
                 // Adapt velocity depending on the hitbox
                 vehicle.adapt_velocity();
@@ -61,7 +61,8 @@ impl<'a> GameSettings<'a> {
                 // Statistiques : record last position & scalar speed
                 if let Some(stats) = self.statistics.vehicle_stats.get_mut(&vehicle.id) {
                     stats.positions.push(vehicle.coordinates);
-                    let speed = ((vehicle.velocity.0.pow(2) + vehicle.velocity.1.pow(2)) as f32).sqrt() as i32;
+                    let speed = ((vehicle.velocity.0.pow(2) + vehicle.velocity.1.pow(2)) as f32)
+                        .sqrt() as i32;
                     stats.velocities.push(speed);
                     self.statistics.update_max_velocity(speed);
                     self.statistics.update_min_velocity(speed);

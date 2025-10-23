@@ -3,6 +3,7 @@ use std::time::Duration;
 
 use crate::config::{FPS, MessageType};
 use crate::config::{GameSettings, TrafficLanes};
+use crate::render::textures::Textures;
 
 mod config;
 mod render;
@@ -15,6 +16,7 @@ pub fn main() {
     let mut game_config = GameSettings::new(&sdl_context, &ttf_context);
 
     let texture_creator = game_config.render.canvas.texture_creator();
+    let texture_struct = Textures::new(&texture_creator);
 
     // Broadcasting the starting message
     game_config
@@ -44,7 +46,9 @@ pub fn main() {
             game_config.render.canvas.clear();
 
             // Creating the map textures
-            game_config.render.create_map();
+            game_config
+                .render
+                .create_map(&texture_struct.as_ref().unwrap());
 
             // Update the vehicles positions
             game_config.update_position();
@@ -75,10 +79,7 @@ pub fn main() {
             pause_switch = true;
 
             // Creating the overlay
-            // game_config
-            //     .broadcaster
-            //     .log("Game pause", MessageType::Setting);
-            game_config.create_pause_overlay();
+            game_config.create_pause_overlay(texture_struct.as_ref().unwrap());
 
             // Render the drawn picture to the screen
             game_config.render.canvas.present();

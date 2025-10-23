@@ -36,12 +36,13 @@ pub const BIG_HITBOX: u32 = 500;
 pub const MEDIUM_HITBOX: u32 = 350;
 pub const SMALL_HITBOX: u32 = 200;
 pub const VERY_SMALL_HITBOX: u32 = 120;
-pub const ALMOST_STOP_HITBOX: u32 = 51;
+pub const ALMOST_STOP_HITBOX: u32 = 60;
 pub const STOP_HITBOX: u32 = 50;
 
 // Spawn cooldown
 pub const SPAWN_COOLDOWN: u64 = 1200;
 pub const KEY_COOLDOWN: u64 = 400;
+pub const VELOCITY_COOLDOWN: u64 = 1;
 
 // <=============================== Spawn positions ===============================>
 
