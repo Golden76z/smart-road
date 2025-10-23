@@ -9,6 +9,7 @@ use crate::config::{
 };
 use rand::prelude::*;
 use sdl2::rect::Rect;
+use std::time::Instant;
 
 #[derive(Debug, Clone)]
 pub struct Vehicle {
@@ -76,6 +77,23 @@ impl Vehicle {
                     sprite_angle = 270.0;
                 }
             }
+
+            // Statistics: increment the spawned-vehicles count
+            // Here we use the lane name as the vehicle type and the random number as the color
+            let vehicle_type = format!("{:?}", lane);
+            let color = format!("{}", rand_num);
+            config.statistics.count_vehicle_spawned(&vehicle_type, &color);
+
+            // Statistics: create a VehicleStats entry for this vehicle (track entry time, initial position and speed)
+            let temp_id = config.vehicle_id + 1; // next id (config.id() will increment)
+            let initial_speed = ((velocity.0.pow(2) + velocity.1.pow(2)) as f32).sqrt() as i32;
+            let vstats = crate::config::statistics::VehicleStats {
+                entry_time: Instant::now(),
+                exit_time: None,
+                positions: vec![position],
+                velocities: vec![initial_speed],
+            };
+            config.statistics.vehicle_stats.insert(temp_id, vstats);
 
             // Creating the log notifiying the spawn
             let msg = format!("Spawn Vehicle on Lane: {:?} Going: {:?}", lane, direction);

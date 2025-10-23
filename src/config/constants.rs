@@ -22,7 +22,7 @@ pub const TILE_HEIGHT: u32 = SCREEN_HEIGHT / 20;
 
 pub const VEHICLE_WIDTH: u32 = TILE_WIDTH;
 pub const VEHICLE_HEIGHT: u32 = TILE_HEIGHT;
-// pub const SAFE_DISTANCE: f64 = (2 * VEHICLE_WIDTH) as f64;
+pub const SAFE_DISTANCE: u32 = 2 * VEHICLE_WIDTH;
 
 // Velocity - Pixels per second
 pub const VELOCITY_ALMOST_STOP: i32 = 30;

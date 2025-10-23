@@ -17,6 +17,8 @@ pub enum MessageType {
 pub struct Broadcaster<'a> {
     font: Font<'a, 'a>,
     messages: Vec<(String, MessageType)>,
+    // Live status lines updated each frame (not persisted in messages)
+    status_lines: Vec<String>,
 }
 
 impl<'a> Broadcaster<'a> {
@@ -28,6 +30,7 @@ impl<'a> Broadcaster<'a> {
         Self {
             font,
             messages: Vec::new(),
+            status_lines: Vec::new(),
         }
     }
 
@@ -85,6 +88,24 @@ impl<'a> Broadcaster<'a> {
         if !ui_state.keybinds_panel && !ui_state.statistic_panel {
             let mut y = 90;
 
+            // First draw any live status lines (these are refreshed each frame)
+            for line in &self.status_lines {
+                let (text_color, bg_color, border_color) = Self::colors_for(MessageType::Info);
+                if let Ok(surface) = self.font.render(line).solid(text_color) {
+                    if let Ok(texture) = surface.as_texture(texture_creator) {
+                        let query = texture.query();
+                        let bg_rect = Rect::new(1028, y - 2, query.width + 16, query.height + 12);
+                        canvas.set_draw_color(bg_color);
+                        let _ = canvas.fill_rect(bg_rect);
+                        canvas.set_draw_color(border_color);
+                        let _ = canvas.draw_rect(bg_rect);
+                        let dst = Rect::new(1035, y + 4, query.width, query.height);
+                        let _ = canvas.copy(&texture, None, Some(dst));
+                        y += (query.height + 16) as i32;
+                    }
+                }
+            }
+
             for (msg, msg_type) in &self.messages {
                 let (text_color, bg_color, border_color) = Self::colors_for(*msg_type);
 
@@ -110,7 +131,28 @@ impl<'a> Broadcaster<'a> {
                         y += (query.height + 16) as i32;
                     }
                 }
+
+
             }
         }
+    }
+
+    /// Set live status lines to be rendered in the debug panel. Overwrites previous lines.
+    pub fn set_status_lines(&mut self, lines: Vec<String>) {
+        self.status_lines = lines;
+    }
+
+    pub fn text_texture<'b>(
+        &self,
+        texture_creator: &'b TextureCreator<WindowContext>,
+        text: &str,
+        color: Color,
+    ) -> Option<sdl2::render::Texture<'b>> {
+        if let Ok(surface) = self.font.render(text).blended(color) {
+            if let Ok(texture) = surface.as_texture(texture_creator) {
+                return Some(texture);
+            }
+        }
+        None
     }
 }
