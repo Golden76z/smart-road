@@ -1,4 +1,4 @@
-use crate::simulation::Vehicle;
+use crate::{config::SAFE_DISTANCE, simulation::Vehicle};
 use std::{
     collections::{HashMap, VecDeque},
     sync::{Arc, Mutex},
@@ -33,7 +33,6 @@ pub type VehicleLane = Arc<Mutex<VecDeque<Vehicle>>>;
 
 pub struct TrafficLanes {
     pub lanes: HashMap<(Lane, Direction), VehicleLane>,
-    // pub hitboxes: Vec<HitBox>,
 }
 
 impl TrafficLanes {
@@ -44,13 +43,11 @@ impl TrafficLanes {
                 lanes.insert((lane, dir), Arc::new(Mutex::new(VecDeque::new())));
             }
         }
-        Self {
-            lanes,
-            // hitboxes: Vec::new(),
-        }
+        Self { lanes }
     }
 
-    pub fn lane(&self, lane: Lane, dir: Direction) -> VehicleLane {
+    // Helper method to check if the Lane/Direction given exist
+    fn lane(&self, lane: Lane, dir: Direction) -> VehicleLane {
         self.lanes
             .get(&(lane, dir))
             .expect("Lane/Direction combination missing")

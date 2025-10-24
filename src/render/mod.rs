@@ -2,6 +2,7 @@
 pub mod keybinds_panel;
 pub mod map;
 pub mod renderer;
+pub mod textures;
 pub mod ui;
 pub mod vehicle;
 

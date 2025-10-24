@@ -1,16 +1,38 @@
-
 impl<'a> GameSettings<'a> {
     pub fn print_statistics(&self) {
         println!("\n===== STATISTIQUES DE LA SIMULATION =====");
-        println!("Nombre de véhicules passés : {}", self.statistics.vehicles_passed);
+        println!(
+            "Nombre de véhicules passés : {}",
+            self.statistics.vehicles_passed
+        );
         println!("Nombre de véhicules spawnés :");
         for ((veh_type, color), count) in &self.statistics.vehicles_spawned {
             println!("  - {} {} : {}", veh_type, color, count);
         }
-        println!("Vitesse maximale atteinte : {}", self.statistics.max_velocity_reached);
-        println!("Vitesse minimale atteinte : {}", if self.statistics.min_velocity_reached == i32::MAX { 0 } else { self.statistics.min_velocity_reached });
-    println!("Temps max dans l'intersection : {:.3} s", self.statistics.max_time_in_intersection);
-    println!("Temps min dans l'intersection : {:.3} s", if self.statistics.min_time_in_intersection == f32::MAX { 0.0 } else { self.statistics.min_time_in_intersection });
+        println!(
+            "Vitesse maximale atteinte : {}",
+            self.statistics.max_velocity_reached
+        );
+        println!(
+            "Vitesse minimale atteinte : {}",
+            if self.statistics.min_velocity_reached == i32::MAX {
+                0
+            } else {
+                self.statistics.min_velocity_reached
+            }
+        );
+        println!(
+            "Temps max dans l'intersection : {:.3} s",
+            self.statistics.max_time_in_intersection
+        );
+        println!(
+            "Temps min dans l'intersection : {:.3} s",
+            if self.statistics.min_time_in_intersection == f32::MAX {
+                0.0
+            } else {
+                self.statistics.min_time_in_intersection
+            }
+        );
         println!("Nombre de close calls : {}", self.statistics.close_calls);
         println!("Paires de close calls détectées :");
         for (id1, id2) in &self.statistics.close_call_pairs {
@@ -25,8 +47,8 @@ use std::time::Instant;
 use crate::{
     config::{
         Broadcaster, Controller, KEY_COOLDOWN, SPAWN_COOLDOWN, SpawnManager, TrafficLanes, UiState,
+        VELOCITY_COOLDOWN, statistics::Statistics,
     },
-    config::statistics::Statistics,
     render::renderer::Renderer,
 };
 
@@ -47,7 +69,7 @@ impl<'a> GameSettings<'a> {
         let render = Renderer::new(&sdl_context).expect("Failed to create a renderer");
 
         GameSettings {
-            spawn_manager: SpawnManager::new(SPAWN_COOLDOWN, KEY_COOLDOWN),
+            spawn_manager: SpawnManager::new(SPAWN_COOLDOWN, KEY_COOLDOWN, VELOCITY_COOLDOWN),
             ui_state: UiState::new(),
             render: render,
             controller: Controller::new(),
@@ -59,6 +81,7 @@ impl<'a> GameSettings<'a> {
         }
     }
 
+    // Incrementing the vehicles id's for vehicle id attribution and identification
     pub fn id(&mut self) -> i16 {
         self.vehicle_id += 1;
         self.vehicle_id

@@ -2,14 +2,18 @@ use crate::config::{
     DESTINATION_BOTTOM_EAST, DESTINATION_BOTTOM_FORWARD, DESTINATION_BOTTOM_WEST,
     DESTINATION_LEFT_EAST, DESTINATION_LEFT_FORWARD, DESTINATION_LEFT_WEST, DESTINATION_RIGHT_EAST,
     DESTINATION_RIGHT_FORWARD, DESTINATION_RIGHT_WEST, DESTINATION_UP_EAST, DESTINATION_UP_FORWARD,
-    DESTINATION_UP_WEST, Direction, GameSettings, HitboxType, Lane, MessageType, SPAWN_BOTTOM_EAST,
-    SPAWN_BOTTOM_FORWARD, SPAWN_BOTTOM_WEST, SPAWN_LEFT_EAST, SPAWN_LEFT_FORWARD, SPAWN_LEFT_WEST,
-    SPAWN_RIGHT_EAST, SPAWN_RIGHT_FORWARD, SPAWN_RIGHT_WEST, SPAWN_UP_EAST, SPAWN_UP_FORWARD,
-    SPAWN_UP_WEST, VELOCITY_NORMAL,
+    DESTINATION_UP_WEST, Direction, GameSettings, HitboxType, Lane, MessageType, SAFE_DISTANCE,
+    SPAWN_BOTTOM_EAST, SPAWN_BOTTOM_FORWARD, SPAWN_BOTTOM_WEST, SPAWN_LEFT_EAST,
+    SPAWN_LEFT_FORWARD, SPAWN_LEFT_WEST, SPAWN_RIGHT_EAST, SPAWN_RIGHT_FORWARD, SPAWN_RIGHT_WEST,
+    SPAWN_UP_EAST, SPAWN_UP_FORWARD, SPAWN_UP_WEST, VELOCITY_NORMAL,
 };
 use rand::prelude::*;
 use sdl2::rect::Rect;
-use std::time::Instant;
+use std::{
+    collections::VecDeque,
+    sync::{Arc, Mutex},
+    time::Instant,
+};
 
 #[derive(Debug, Clone)]
 pub struct Vehicle {
@@ -18,6 +22,7 @@ pub struct Vehicle {
     pub lane: Lane,
     pub direction: Direction,
     pub has_turned: bool,
+    pub _distance_traveled: f64,
     pub sprite_angle: f64,
     pub hitbox: (Option<Rect>, Option<Rect>),
     pub hitbox_type: HitboxType,
@@ -81,7 +86,9 @@ impl Vehicle {
             // Here we use the lane name as the vehicle type and the random number as the color
             let vehicle_type = format!("{:?}", lane);
             let color = format!("{}", rand_num);
-            config.statistics.count_vehicle_spawned(&vehicle_type, &color);
+            config
+                .statistics
+                .count_vehicle_spawned(&vehicle_type, &color);
 
             // Statistics: create a VehicleStats entry for this vehicle (track entry time, initial position and speed)
             let temp_id = config.vehicle_id + 1; // next id (config.id() will increment)
@@ -105,6 +112,7 @@ impl Vehicle {
                 lane: lane,
                 direction: direction,
                 has_turned: false,
+                _distance_traveled: 0.0,
                 sprite_angle: sprite_angle,
                 hitbox: (None, None),
                 hitbox_type: HitboxType::Stop,
@@ -132,11 +140,23 @@ impl Vehicle {
         };
     }
 
-    pub fn update_position(&mut self, delta_time: f32) {
-        self.coordinates.0 =
-            (self.coordinates.0 as f32 + self.velocity.0 as f32 * delta_time) as i32;
-        self.coordinates.1 =
-            (self.coordinates.1 as f32 + self.velocity.1 as f32 * delta_time) as i32;
+    // Method to update the position of the vehicle based on the velocity
+    pub fn update_position(&mut self, vehicle_ahead: Option<(i32, i32)>, delta_time: f32) {
+        let can_move = if let Some(ahead_coords) = vehicle_ahead {
+            let distance = (ahead_coords.0 - self.coordinates.0).abs()
+                + (ahead_coords.1 - self.coordinates.1).abs();
+            distance >= SAFE_DISTANCE as i32
+        } else {
+            // If there are no vehicle ahead
+            true
+        };
+
+        if can_move {
+            self.coordinates.0 =
+                (self.coordinates.0 as f32 + self.velocity.0 as f32 * delta_time) as i32;
+            self.coordinates.1 =
+                (self.coordinates.1 as f32 + self.velocity.1 as f32 * delta_time) as i32;
+        }
     }
 
     // Comparing coordinates with destination to check if the vehicle should turn or not
