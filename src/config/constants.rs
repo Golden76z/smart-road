@@ -36,7 +36,7 @@ pub const BIG_HITBOX: u32 = 300;
 pub const MEDIUM_HITBOX: u32 = 225;
 pub const SMALL_HITBOX: u32 = 150;
 pub const VERY_SMALL_HITBOX: u32 = 75;
-pub const ALMOST_STOP_HITBOX: u32 = 51;
+pub const ALMOST_STOP_HITBOX: u32 = 52;
 pub const STOP_HITBOX: u32 = 50;
 
 // Spawn cooldown
