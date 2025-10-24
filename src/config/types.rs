@@ -1,4 +1,4 @@
-use crate::simulation::Vehicle;
+use crate::{config::SAFE_DISTANCE, simulation::Vehicle};
 use std::{
     collections::{HashMap, VecDeque},
     sync::{Arc, Mutex},
@@ -53,40 +53,6 @@ impl TrafficLanes {
             .expect("Lane/Direction combination missing")
             .clone()
     }
-
-    // // Method to check if the safe distance is respected on same lane & direction
-    // pub fn safe_distance(&mut self, lane: Lane, direction: Direction) -> bool {
-    //     let lane = self
-    //         .lanes
-    //         .get(&(lane, direction))
-    //         .expect("Lane/Direction combination missing")
-    //         .clone();
-    //     let last_vehicle = lane.lock().unwrap().pop_back().unwrap().coordinates;
-    //     match lane {
-    //         Lane::Up => {
-    //             match direction {
-    //                 Direction::West => {
-    //
-    //                 },
-    //                 Direction::Forward => {
-    //
-    //                 },
-    //                 Direction::East => {
-    //
-    //                 }
-    //             }
-    //         },
-    //         Lane::Bottom => {
-    //
-    //         },
-    //         Lane::Left => {
-    //
-    //         },
-    //         Lane::Right => {
-    //
-    //         }
-    //     }
-    // }
 
     // Method to insert a new vehicle in the TrafficLane struct
     pub fn insert_vehicle(&mut self, lane: Lane, direction: Direction, vehicle: Vehicle) {

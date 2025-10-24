@@ -16,7 +16,8 @@ pub fn main() {
     let mut game_config = GameSettings::new(&sdl_context, &ttf_context);
 
     let texture_creator = game_config.render.canvas.texture_creator();
-    let texture_struct = Textures::new(&texture_creator);
+    let texture_struct =
+        Textures::new(&texture_creator).expect("Error creating the Textures struct");
 
     // Broadcasting the starting message
     game_config
@@ -46,9 +47,7 @@ pub fn main() {
             game_config.render.canvas.clear();
 
             // Creating the map textures
-            game_config
-                .render
-                .create_map(&texture_struct.as_ref().unwrap());
+            game_config.render.create_map(&texture_struct);
 
             // Update the vehicles positions
             game_config.update_position();
@@ -61,10 +60,10 @@ pub fn main() {
             game_config.broadcaster.set_status_lines(status_lines);
 
             // Render the vehicles
-            game_config.render_vehicles(&texture_creator);
+            game_config.render_vehicles(&texture_struct);
 
             // Drawing the overlays
-            game_config.create_overlay();
+            game_config.create_overlay(&texture_struct);
 
             // Writing the debug info on the panel (if visible)
             game_config.broadcaster.render(
@@ -79,7 +78,7 @@ pub fn main() {
             pause_switch = true;
 
             // Creating the overlay
-            game_config.create_pause_overlay(texture_struct.as_ref().unwrap());
+            game_config.create_pause_overlay(&texture_struct);
 
             // Render the drawn picture to the screen
             game_config.render.canvas.present();

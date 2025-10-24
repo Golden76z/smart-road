@@ -77,7 +77,7 @@ impl Renderer {
 
             // Drawing left and right lanes
             self.draw_rotated(
-                &texture.road.get("Vertical").unwrap(),
+                &texture.road.get("Horizontal").unwrap(),
                 0,
                 350,
                 350,
@@ -86,7 +86,7 @@ impl Renderer {
             )
             .expect("[map.rs]: Error drawing left lane");
             self.draw_rotated(
-                &texture.road.get("Vertical").unwrap(),
+                &texture.road.get("Horizontal").unwrap(),
                 650,
                 350,
                 350,

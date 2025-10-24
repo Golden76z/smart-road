@@ -1,49 +1,46 @@
-use sdl2::{
-    image::LoadTexture, pixels::Color, rect::Rect, render::TextureCreator, video::WindowContext,
+use sdl2::{pixels::Color, rect::Rect};
+
+use crate::{
+    config::{GameSettings, HitboxType, VEHICLE_HEIGHT, VEHICLE_WIDTH},
+    render::textures::Textures,
 };
 
-use crate::config::{GameSettings, HitboxType, VEHICLE_HEIGHT, VEHICLE_WIDTH};
-
 impl<'a> GameSettings<'a> {
-    pub fn render_vehicles(&mut self, texture_creator: &TextureCreator<WindowContext>) {
-        let car_textures = vec![
-            texture_creator
-                .load_texture("../../assets/images/cars/car_1.png")
-                .unwrap(),
-            texture_creator
-                .load_texture("../../assets/images/cars/car_2.png")
-                .unwrap(),
-            texture_creator
-                .load_texture("../../assets/images/cars/car_3.png")
-                .unwrap(),
-            texture_creator
-                .load_texture("../../assets/images/cars/car_4.png")
-                .unwrap(),
-        ];
-
+    pub fn render_vehicles(&mut self, textures: &Textures) {
         for ((_, _), vehicle_lane) in &self.lanes.lanes {
             let queue = vehicle_lane.lock().unwrap();
 
             for vehicle in queue.iter() {
                 let (x, y) = vehicle.coordinates;
-                let texture = &car_textures[vehicle.color as usize % car_textures.len()];
+                let texture = &textures.vehicle;
 
-                // Draw car at its coordinates
+                // Matching the sprite depending on the sprite angle
                 let dest = Rect::new(x as i32, y as i32, VEHICLE_WIDTH, VEHICLE_HEIGHT);
-
-                // Rendering the vehicle texture
-                self.render
-                    .canvas
-                    .copy_ex(
+                let sprite_position: i32 = (vehicle.color * 50) as i32;
+                match vehicle.sprite_angle {
+                    0.0 => self.render.canvas.copy(
                         &texture,
-                        None,
+                        Rect::new(150, sprite_position, 50, 50),
                         dest,
-                        vehicle.sprite_angle,
-                        None,
-                        false,
-                        false,
-                    )
-                    .unwrap();
+                    ),
+                    90.0 => self.render.canvas.copy(
+                        &texture,
+                        Rect::new(0, sprite_position, 50, 50),
+                        dest,
+                    ),
+                    180.0 => self.render.canvas.copy(
+                        &texture,
+                        Rect::new(50, sprite_position, 50, 50),
+                        dest,
+                    ),
+                    270.0 => self.render.canvas.copy(
+                        &texture,
+                        Rect::new(100, sprite_position, 50, 50),
+                        dest,
+                    ),
+                    _ => unreachable!(),
+                }
+                .expect("Error trying to read vehicle sprite angle");
 
                 // Changing the drawing color depending on the hitbox size
                 match vehicle.hitbox_type {

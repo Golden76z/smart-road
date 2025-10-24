@@ -6,7 +6,7 @@ use sdl2::video::WindowContext;
 use sdl2::{image::LoadTexture, rect::Rect};
 
 impl<'a> GameSettings<'a> {
-    pub fn create_overlay(&mut self) {
+    pub fn create_overlay(&mut self, textures: &Textures) {
         let texture_creator = self.render.canvas.texture_creator();
 
         let main_overlay = texture_creator
@@ -32,7 +32,7 @@ impl<'a> GameSettings<'a> {
 
         // Checking Ui State to see if keybinds overlay should be displayed
         if self.ui_state.keybinds_panel {
-            self.keybinds_panel(&texture_creator, coordinates_first);
+            self.keybinds_panel(textures, coordinates_first);
         }
 
         // Checking Ui State to see if statistic overlay should be displayed
@@ -82,10 +82,17 @@ impl<'a> GameSettings<'a> {
         }
     }
 
+    // Method to display the pause overlay on the screen using the Textures struct map
     pub fn create_pause_overlay(&mut self, textures: &Textures) {
+        let pause_overlay = textures
+            .overlay
+            .get("Pause")
+            .expect("Failed to get the Pause overlay in the Pause overlay creation method");
+
+        // Rendering the pause overlay texture
         self.render
             .canvas
-            .copy(textures.overlay.get("Pause").unwrap(), None, None)
+            .copy(pause_overlay, None, None)
             .expect("Error generating the pause overlay");
     }
 
