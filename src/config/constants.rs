@@ -42,7 +42,7 @@ pub const STOP_HITBOX: u32 = 50;
 // Spawn cooldown
 pub const SPAWN_COOLDOWN: u64 = 1200;
 pub const KEY_COOLDOWN: u64 = 400;
-pub const VELOCITY_COOLDOWN: u64 = 1;
+pub const VELOCITY_COOLDOWN: u64 = 20;
 
 // <=============================== Spawn positions ===============================>
 

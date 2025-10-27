@@ -2,6 +2,10 @@
 
 A traffic simulation featuring autonomous vehicles (AVs) navigating a smart intersection without traditional traffic lights. This project demonstrates an intelligent traffic management algorithm that prevents collisions while minimizing congestion.
 
+## Demo
+
+![smart_road](./simulation.gif)
+
 ## Features
 
 ### Core Functionality
