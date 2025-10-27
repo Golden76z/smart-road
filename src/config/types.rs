@@ -1,4 +1,4 @@
-use crate::{config::SAFE_DISTANCE, simulation::Vehicle};
+use crate::simulation::Vehicle;
 use std::{
     collections::{HashMap, VecDeque},
     sync::{Arc, Mutex},

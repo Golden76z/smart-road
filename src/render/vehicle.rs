@@ -42,28 +42,34 @@ impl<'a> GameSettings<'a> {
                 }
                 .expect("Error trying to read vehicle sprite angle");
 
-                // Changing the drawing color depending on the hitbox size
-                match vehicle.hitbox_type {
-                    HitboxType::Big => self.render.canvas.set_draw_color(Color::RGB(0, 255, 0)),
-                    HitboxType::Medium => {
-                        self.render.canvas.set_draw_color(Color::RGB(255, 255, 0))
+                if self.ui_state.debug_panel {
+                    // Changing the drawing color depending on the hitbox size
+                    match vehicle.hitbox_type {
+                        HitboxType::Big => self.render.canvas.set_draw_color(Color::RGB(0, 255, 0)),
+                        HitboxType::Medium => {
+                            self.render.canvas.set_draw_color(Color::RGB(255, 255, 0))
+                        }
+                        HitboxType::Small => {
+                            self.render.canvas.set_draw_color(Color::RGB(255, 180, 0))
+                        }
+                        HitboxType::VerySmall => {
+                            self.render.canvas.set_draw_color(Color::RGB(255, 120, 0))
+                        }
+                        HitboxType::AlmostStop => {
+                            self.render.canvas.set_draw_color(Color::RGB(255, 60, 0));
+                        }
+                        HitboxType::Stop => {
+                            self.render.canvas.set_draw_color(Color::RGB(255, 0, 0))
+                        }
                     }
-                    HitboxType::Small => self.render.canvas.set_draw_color(Color::RGB(255, 180, 0)),
-                    HitboxType::VerySmall => {
-                        self.render.canvas.set_draw_color(Color::RGB(255, 120, 0))
-                    }
-                    HitboxType::AlmostStop => {
-                        self.render.canvas.set_draw_color(Color::RGB(255, 60, 0));
-                    }
-                    HitboxType::Stop => self.render.canvas.set_draw_color(Color::RGB(255, 0, 0)),
-                }
 
-                // Rendering the 1 or 2 parts of the vehicle hitbox
-                for rect in [&vehicle.hitbox.0, &vehicle.hitbox.1].into_iter().flatten() {
-                    self.render
-                        .canvas
-                        .draw_rect(*rect)
-                        .expect("Error drawing hitbox");
+                    // Rendering the 1 or 2 parts of the vehicle hitbox
+                    for rect in [&vehicle.hitbox.0, &vehicle.hitbox.1].into_iter().flatten() {
+                        self.render
+                            .canvas
+                            .draw_rect(*rect)
+                            .expect("Error drawing hitbox");
+                    }
                 }
             }
         }

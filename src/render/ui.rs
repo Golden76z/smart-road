@@ -1,8 +1,5 @@
 use crate::config::GameSettings;
 use crate::render::textures::Textures;
-use sdl2::pixels::Color;
-use sdl2::render::TextureCreator;
-use sdl2::video::WindowContext;
 use sdl2::{image::LoadTexture, rect::Rect};
 
 impl<'a> GameSettings<'a> {
@@ -29,6 +26,9 @@ impl<'a> GameSettings<'a> {
 
         let coordinates_first = 2;
         let mut coordinates_second = 498;
+
+        // Rendering the basic keys (On the top left corner)
+        self.basic_keys(textures);
 
         // Checking Ui State to see if keybinds overlay should be displayed
         if self.ui_state.keybinds_panel {
@@ -58,15 +58,6 @@ impl<'a> GameSettings<'a> {
                     ),
                 )
                 .expect("Error generating the statistic overlay");
-
-            // Render statistics text using the broadcaster's font helper
-            // Pass overlay rect (left, top, width) so text can be placed inside the panel with padding
-            self.render_statistics_text(
-                &texture_creator,
-                overlay_left,
-                coordinates_second,
-                overlay_width,
-            );
         }
 
         // If both Statistics & Keybinds overlay are off, display debug overlay
@@ -94,45 +85,5 @@ impl<'a> GameSettings<'a> {
             .canvas
             .copy(pause_overlay, None, None)
             .expect("Error generating the pause overlay");
-    }
-
-    pub fn render_statistics_text(
-        &mut self,
-        texture_creator: &TextureCreator<WindowContext>,
-        overlay_left: i32,
-        overlay_top: i32,
-        overlay_width: u32,
-    ) {
-        let stats = &self.statistics;
-
-        // Padding inside the overlay
-        let padding_x = 12;
-        let mut y = overlay_top + 65;
-
-        let lines = stats.as_lines();
-
-        for line in lines {
-            if let Some(texture) =
-                self.broadcaster
-                    .text_texture(&texture_creator, &line, Color::WHITE)
-            {
-                let query = texture.query();
-
-                // Compute destination X so text is inside the overlay with padding
-                let dst_x = overlay_left + padding_x;
-
-                // If the rendered text is wider than available overlay width, we clamp the width
-                let available_w = overlay_width.saturating_sub((padding_x * 2) as u32);
-                let dst_w = if query.width > available_w {
-                    available_w
-                } else {
-                    query.width
-                };
-
-                let dst = Rect::new(dst_x, y, dst_w, query.height);
-                let _ = self.render.canvas.copy(&texture, None, Some(dst));
-                y += (query.height as i32) + 6;
-            }
-        }
     }
 }

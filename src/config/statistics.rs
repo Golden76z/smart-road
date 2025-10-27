@@ -40,14 +40,34 @@ impl Statistics {
     pub fn as_lines(&self) -> Vec<String> {
         let mut lines = Vec::new();
 
-        lines.push(format!("Nombre de véhicules passés : {}", self.vehicles_passed));
-        lines.push(format!("Vitesse maximale atteinte : {}", self.max_velocity_reached));
-        let min_v = if self.min_velocity_reached == i32::MAX { 0 } else { self.min_velocity_reached };
-        lines.push(format!("Vitesse minimale atteinte : {}", min_v));
-        lines.push(format!("Temps max dans l'intersection : {:.3} s", self.max_time_in_intersection));
-        let min_time = if self.min_time_in_intersection == f32::MAX { 0.0 } else { self.min_time_in_intersection };
-        lines.push(format!("Temps min dans l'intersection : {:.3} s", min_time));
-        lines.push(format!("Nombre de close calls : {}", self.close_calls));
+        lines.push(format!(
+            "Number of vehicles that reached destination: {}",
+            self.vehicles_passed
+        ));
+        lines.push(format!(
+            "Max velocity recorded: {}",
+            self.max_velocity_reached
+        ));
+        let min_v = if self.min_velocity_reached == i32::MAX {
+            0
+        } else {
+            self.min_velocity_reached
+        };
+        lines.push(format!("Min velocity recorded: {}", min_v));
+        lines.push(format!(
+            "Max time spent in intersection area: {:.1} s",
+            self.max_time_in_intersection
+        ));
+        let min_time = if self.min_time_in_intersection == f32::MAX {
+            0.0
+        } else {
+            self.min_time_in_intersection
+        };
+        lines.push(format!(
+            "Min time spent in intersection area: {:.1} s",
+            min_time
+        ));
+        lines.push(format!("Number of close calls: {}", self.close_calls));
         lines
     }
 
@@ -101,7 +121,9 @@ impl Statistics {
                 }
 
                 // Need at least a last position for each vehicle
-                if let (Some(&(x1, y1)), Some(&(x2, y2))) = (v1.positions.last(), v2.positions.last()) {
+                if let (Some(&(x1, y1)), Some(&(x2, y2))) =
+                    (v1.positions.last(), v2.positions.last())
+                {
                     let dx = x1 - x2;
                     let dy = y1 - y2;
                     let dist2 = (dx * dx + dy * dy) as u32;
@@ -130,7 +152,8 @@ impl Statistics {
 
                         // dot product between relative velocity and relative position
                         // if dot < 0 they are moving towards each other (distance decreasing)
-                        let dot = rel_vel.0 as i64 * rel_pos.0 as i64 + rel_vel.1 as i64 * rel_pos.1 as i64;
+                        let dot = rel_vel.0 as i64 * rel_pos.0 as i64
+                            + rel_vel.1 as i64 * rel_pos.1 as i64;
 
                         if dot < 0 {
                             let pair = if id1 < id2 { (id1, id2) } else { (id2, id1) };
@@ -151,3 +174,4 @@ impl Default for Statistics {
         Self::new()
     }
 }
+

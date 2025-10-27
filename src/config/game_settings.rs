@@ -1,8 +1,8 @@
 impl<'a> GameSettings<'a> {
     pub fn print_statistics(&self) {
-        println!("\n===== STATISTIQUES DE LA SIMULATION =====");
+        println!("\n===== SIMULATION STATISTICS =====");
         println!(
-            "Nombre de véhicules passés : {}",
+            "Number of vehicles that reached destination: {}",
             self.statistics.vehicles_passed
         );
         println!("Nombre de véhicules spawnés :");
@@ -10,11 +10,11 @@ impl<'a> GameSettings<'a> {
             println!("  - {} {} : {}", veh_type, color, count);
         }
         println!(
-            "Vitesse maximale atteinte : {}",
+            "Max velocity recorded: {}",
             self.statistics.max_velocity_reached
         );
         println!(
-            "Vitesse minimale atteinte : {}",
+            "Min velocity recorded: {}",
             if self.statistics.min_velocity_reached == i32::MAX {
                 0
             } else {
@@ -22,22 +22,22 @@ impl<'a> GameSettings<'a> {
             }
         );
         println!(
-            "Temps max dans l'intersection : {:.3} s",
+            "Max time spent in intersection area: {:.1} s",
             self.statistics.max_time_in_intersection
         );
         println!(
-            "Temps min dans l'intersection : {:.3} s",
+            "Min time spent in intersection area: {:.1} s",
             if self.statistics.min_time_in_intersection == f32::MAX {
                 0.0
             } else {
                 self.statistics.min_time_in_intersection
             }
         );
-        println!("Nombre de close calls : {}", self.statistics.close_calls);
-        println!("Paires de close calls détectées :");
-        for (id1, id2) in &self.statistics.close_call_pairs {
-            println!("  - Véhicules {} et {}", id1, id2);
-        }
+        println!("Number of close calls: {}", self.statistics.close_calls);
+        // println!("Paires de close calls détectées :");
+        // for (id1, id2) in &self.statistics.close_call_pairs {
+        //     println!("  - Véhicules {} et {}", id1, id2);
+        // }
         println!("========================================\n");
     }
 }

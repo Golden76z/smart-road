@@ -35,7 +35,7 @@ impl<'a> GameSettings<'a> {
                         }
 
                         // Toggle the keybinds panel (ON by default)
-                        Keycode::I => {
+                        Keycode::K => {
                             self.ui_state.toggle_keybinds();
                             let msg = format!(
                                 "Keybinds panel switched from: {:?} to {:?}",
@@ -45,7 +45,7 @@ impl<'a> GameSettings<'a> {
                             Ok(())
                         }
                         // Toggle the statistic panel (ON by default)
-                        Keycode::O => {
+                        Keycode::S => {
                             self.ui_state.toggle_statistic();
                             self.broadcaster
                                 .log("Statistic panel switched", MessageType::Setting);
