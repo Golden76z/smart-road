@@ -17,6 +17,7 @@ A traffic simulation featuring autonomous vehicles (AVs) navigating a smart inte
 - **Close Call Detection**: Tracks near-misses for safety analysis
 - **Comprehensive Statistics**: Detailed metrics on vehicle performance and safety
 
+---
 ### Controls
 
 | Key | Action |
@@ -26,6 +27,7 @@ A traffic simulation featuring autonomous vehicles (AVs) navigating a smart inte
 | `ESC` | Exit simulation and display statistics |
 
 #### Random Mode
+
 In **Random Mode**, pressing a directional key spawns a vehicle entering from that direction and heading toward a **random destination**.
 
 | Key | Spawns Vehicle From | Heading |
@@ -36,6 +38,7 @@ In **Random Mode**, pressing a directional key spawns a vehicle entering from th
 | `←` Arrow Left | East | Random direction |
 
 #### Manual Mode
+
 In **Manual Mode**, you first select **which lane** the vehicle will enter from using the directional keys,  
 then choose **where it will go** using number keys:
 
