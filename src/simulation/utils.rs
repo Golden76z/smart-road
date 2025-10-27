@@ -1,7 +1,7 @@
 use crate::{
     config::{
         ALMOST_STOP_HITBOX, BIG_HITBOX, Direction, MEDIUM_HITBOX, SMALL_HITBOX, STOP_HITBOX,
-        VEHICLE_HEIGHT, VEHICLE_WIDTH, VERY_SMALL_HITBOX,
+        TILE_HEIGHT, VEHICLE_HEIGHT, VEHICLE_WIDTH, VERY_SMALL_HITBOX,
     },
     simulation::Vehicle,
 };
@@ -60,7 +60,7 @@ impl Vehicle {
                             )),
                             Some(Rect::new(
                                 coordinates.0 + offset,
-                                coordinates.1 - (*hitbox - VEHICLE_HEIGHT) as i32 + offset,
+                                coordinates.1 - (*hitbox - TILE_HEIGHT) as i32 + offset,
                                 VEHICLE_WIDTH,
                                 *hitbox - offset as u32,
                             )),

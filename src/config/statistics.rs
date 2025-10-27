@@ -40,14 +40,34 @@ impl Statistics {
     pub fn as_lines(&self) -> Vec<String> {
         let mut lines = Vec::new();
 
-        lines.push(format!("Nombre de véhicules passés : {}", self.vehicles_passed));
-        lines.push(format!("Vitesse maximale atteinte : {}", self.max_velocity_reached));
-        let min_v = if self.min_velocity_reached == i32::MAX { 0 } else { self.min_velocity_reached };
-        lines.push(format!("Vitesse minimale atteinte : {}", min_v));
-        lines.push(format!("Temps max dans l'intersection : {:.3} s", self.max_time_in_intersection));
-        let min_time = if self.min_time_in_intersection == f32::MAX { 0.0 } else { self.min_time_in_intersection };
-        lines.push(format!("Temps min dans l'intersection : {:.3} s", min_time));
-        lines.push(format!("Nombre de close calls : {}", self.close_calls));
+        lines.push(format!(
+            "Number of vehicles that reached destination: {}",
+            self.vehicles_passed
+        ));
+        lines.push(format!(
+            "Max velocity recorded: {}",
+            self.max_velocity_reached
+        ));
+        let min_v = if self.min_velocity_reached == i32::MAX {
+            0
+        } else {
+            self.min_velocity_reached
+        };
+        lines.push(format!("Min velocity recorded: {}", min_v));
+        lines.push(format!(
+            "Max time spent in intersection area: {:.1} s",
+            self.max_time_in_intersection
+        ));
+        let min_time = if self.min_time_in_intersection == f32::MAX {
+            0.0
+        } else {
+            self.min_time_in_intersection
+        };
+        lines.push(format!(
+            "Min time spent in intersection area: {:.1} s",
+            min_time
+        ));
+        lines.push(format!("Number of close calls: {}", self.close_calls));
         lines
     }
 
@@ -93,17 +113,54 @@ impl Statistics {
             for j in (i + 1)..vehicle_ids.len() {
                 let id1 = vehicle_ids[i];
                 let id2 = vehicle_ids[j];
+                // Skip vehicles that have already exited (we don't want to count close calls after exit)
                 let v1 = &self.vehicle_stats[&id1];
                 let v2 = &self.vehicle_stats[&id2];
-                if let (Some(&(x1, y1)), Some(&(x2, y2))) = (v1.positions.last(), v2.positions.last()) {
+                if v1.exit_time.is_some() || v2.exit_time.is_some() {
+                    continue;
+                }
+
+                // Need at least a last position for each vehicle
+                if let (Some(&(x1, y1)), Some(&(x2, y2))) =
+                    (v1.positions.last(), v2.positions.last())
+                {
                     let dx = x1 - x2;
                     let dy = y1 - y2;
                     let dist2 = (dx * dx + dy * dy) as u32;
+
                     if dist2 < SAFE_DISTANCE * SAFE_DISTANCE {
-                        let pair = if id1 < id2 { (id1, id2) } else { (id2, id1) };
-                        if !self.close_call_pairs.contains(&pair) {
-                            self.close_call_pairs.insert(pair);
-                            self.record_close_call();
+                        // Approximate velocities from the last two recorded positions (if available).
+                        // This allows us to ignore vehicles that are traveling in the same direction
+                        // (e.g., cars following each other) and only flag pairs that are actually
+                        // approaching one another.
+                        let vel1 = if v1.positions.len() >= 2 {
+                            let &(px1, py1) = &v1.positions[v1.positions.len() - 2];
+                            ((x1 - px1) as i32, (y1 - py1) as i32)
+                        } else {
+                            (0, 0)
+                        };
+                        let vel2 = if v2.positions.len() >= 2 {
+                            let &(px2, py2) = &v2.positions[v2.positions.len() - 2];
+                            ((x2 - px2) as i32, (y2 - py2) as i32)
+                        } else {
+                            (0, 0)
+                        };
+
+                        // relative velocity and relative position
+                        let rel_vel = (vel1.0 - vel2.0, vel1.1 - vel2.1);
+                        let rel_pos = (x1 - x2, y1 - y2);
+
+                        // dot product between relative velocity and relative position
+                        // if dot < 0 they are moving towards each other (distance decreasing)
+                        let dot = rel_vel.0 as i64 * rel_pos.0 as i64
+                            + rel_vel.1 as i64 * rel_pos.1 as i64;
+
+                        if dot < 0 {
+                            let pair = if id1 < id2 { (id1, id2) } else { (id2, id1) };
+                            if !self.close_call_pairs.contains(&pair) {
+                                self.close_call_pairs.insert(pair);
+                                self.record_close_call();
+                            }
                         }
                     }
                 }
@@ -117,3 +174,4 @@ impl Default for Statistics {
         Self::new()
     }
 }
+

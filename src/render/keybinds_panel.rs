@@ -5,6 +5,53 @@ use crate::{
 use sdl2::rect::Rect;
 
 impl<'a> GameSettings<'a> {
+    pub fn basic_keys(&mut self, textures: &Textures) {
+        let keys = &textures.keys;
+
+        // Rendering the ui keys (Keybinds - Stats - Debug)
+        if self.ui_state.keybinds_panel {
+            self.render
+                .canvas
+                .copy(&keys, Rect::new(300, 50, 50, 50), Rect::new(39, 41, 50, 50))
+                .expect("Failed to load the Keybinds down key")
+        } else {
+            self.render
+                .canvas
+                .copy(&keys, Rect::new(300, 0, 50, 50), Rect::new(39, 41, 50, 50))
+                .expect("Failed to load the Keybinds up key")
+        }
+        if self.ui_state.statistic_panel {
+            self.render
+                .canvas
+                .copy(
+                    &keys,
+                    Rect::new(350, 50, 50, 50),
+                    Rect::new(140, 41, 50, 50),
+                )
+                .expect("Failed to load the Statistics down key")
+        } else {
+            self.render
+                .canvas
+                .copy(&keys, Rect::new(350, 0, 50, 50), Rect::new(140, 41, 50, 50))
+                .expect("Failed to load the Statistics up key")
+        }
+        if self.ui_state.debug_panel {
+            self.render
+                .canvas
+                .copy(
+                    &keys,
+                    Rect::new(100, 50, 50, 50),
+                    Rect::new(230, 41, 50, 50),
+                )
+                .expect("Failed to load the Debug down key")
+        } else {
+            self.render
+                .canvas
+                .copy(&keys, Rect::new(100, 0, 50, 50), Rect::new(230, 41, 50, 50))
+                .expect("Failed to load the Debug up key")
+        }
+    }
+
     pub fn keybinds_panel(&mut self, textures: &Textures, y: i32) {
         // Loading the textures from the Textures struct
         let keys = &textures.keys;
@@ -50,7 +97,7 @@ impl<'a> GameSettings<'a> {
                 .canvas
                 .copy(
                     &keys,
-                    Rect::new(50, 0, 50, 50),
+                    Rect::new(0, 50, 50, 50),
                     Rect::new(1070, 145, 50, 50),
                 )
                 .expect("Error");
@@ -168,7 +215,7 @@ impl<'a> GameSettings<'a> {
                 .canvas
                 .copy(
                     &keys,
-                    Rect::new(0, 50, 50, 50),
+                    Rect::new(50, 0, 50, 50),
                     Rect::new(1070, 305, 50, 50),
                 )
                 .expect("Error");
@@ -260,7 +307,7 @@ impl<'a> GameSettings<'a> {
                 .copy(
                     &keys,
                     Rect::new(0, 150, 50, 50),
-                    Rect::new(1100, 390, 50, 50),
+                    Rect::new(1100, 400, 50, 50),
                 )
                 .expect("Error");
         } else {
@@ -269,7 +316,7 @@ impl<'a> GameSettings<'a> {
                 .copy(
                     &keys,
                     Rect::new(0, 100, 50, 50),
-                    Rect::new(1100, 390, 50, 50),
+                    Rect::new(1100, 400, 50, 50),
                 )
                 .expect("Error");
         }
@@ -280,7 +327,7 @@ impl<'a> GameSettings<'a> {
                 .copy(
                     &keys,
                     Rect::new(50, 150, 50, 50),
-                    Rect::new(1175, 390, 50, 50),
+                    Rect::new(1175, 400, 50, 50),
                 )
                 .expect("Error");
         } else {
@@ -289,7 +336,7 @@ impl<'a> GameSettings<'a> {
                 .copy(
                     &keys,
                     Rect::new(50, 100, 50, 50),
-                    Rect::new(1175, 390, 50, 50),
+                    Rect::new(1175, 400, 50, 50),
                 )
                 .expect("Error");
         }
@@ -300,7 +347,7 @@ impl<'a> GameSettings<'a> {
                 .copy(
                     &keys,
                     Rect::new(100, 150, 50, 50),
-                    Rect::new(1250, 390, 50, 50),
+                    Rect::new(1250, 400, 50, 50),
                 )
                 .expect("Error");
         } else {
@@ -309,7 +356,7 @@ impl<'a> GameSettings<'a> {
                 .copy(
                     &keys,
                     Rect::new(100, 100, 50, 50),
-                    Rect::new(1250, 390, 50, 50),
+                    Rect::new(1250, 400, 50, 50),
                 )
                 .expect("Error");
         }

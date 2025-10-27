@@ -9,11 +9,7 @@ use crate::config::{
 };
 use rand::prelude::*;
 use sdl2::rect::Rect;
-use std::{
-    collections::VecDeque,
-    sync::{Arc, Mutex},
-    time::Instant,
-};
+use std::time::Instant;
 
 #[derive(Debug, Clone)]
 pub struct Vehicle {
@@ -156,6 +152,8 @@ impl Vehicle {
                 (self.coordinates.0 as f32 + self.velocity.0 as f32 * delta_time) as i32;
             self.coordinates.1 =
                 (self.coordinates.1 as f32 + self.velocity.1 as f32 * delta_time) as i32;
+        } else {
+            self.hitbox_type = HitboxType::Stop;
         }
     }
 

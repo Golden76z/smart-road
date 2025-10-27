@@ -1,7 +1,7 @@
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::render::{TextureCreator, WindowCanvas};
-use sdl2::ttf::Font;
+use sdl2::ttf::{Font, Sdl2TtfContext};
 use sdl2::video::WindowContext;
 
 use crate::config::{MAX_DEBUG_MESSAGES, UiState};
@@ -16,20 +16,20 @@ pub enum MessageType {
 
 pub struct Broadcaster<'a> {
     font: Font<'a, 'a>,
-    messages: Vec<(String, MessageType)>,
+    debug_messages: Vec<(String, MessageType)>,
     // Live status lines updated each frame (not persisted in messages)
     status_lines: Vec<String>,
 }
 
 impl<'a> Broadcaster<'a> {
-    pub fn new(ttf_context: &'a sdl2::ttf::Sdl2TtfContext) -> Self {
+    pub fn new(ttf_context: &'a Sdl2TtfContext) -> Self {
         let font = ttf_context
             .load_font("../../assets/font/Pixellari.ttf", 16)
             .expect("Failed to load font");
 
         Self {
             font,
-            messages: Vec::new(),
+            debug_messages: Vec::new(),
             status_lines: Vec::new(),
         }
     }
@@ -44,10 +44,10 @@ impl<'a> Broadcaster<'a> {
         };
 
         println!("{} {}", prefix, msg);
-        self.messages.push((msg.to_string(), msg_type));
+        self.debug_messages.push((msg.to_string(), msg_type));
 
-        if self.messages.len() > MAX_DEBUG_MESSAGES as usize {
-            self.messages.remove(0);
+        if self.debug_messages.len() > MAX_DEBUG_MESSAGES as usize {
+            self.debug_messages.remove(0);
         }
     }
 
@@ -84,29 +84,11 @@ impl<'a> Broadcaster<'a> {
         texture_creator: &TextureCreator<WindowContext>,
         ui_state: &UiState,
     ) {
+        let mut y = 90;
+
         // Only draw when debug panels are off
         if !ui_state.keybinds_panel && !ui_state.statistic_panel {
-            let mut y = 90;
-
-            // First draw any live status lines (these are refreshed each frame)
-            for line in &self.status_lines {
-                let (text_color, bg_color, border_color) = Self::colors_for(MessageType::Info);
-                if let Ok(surface) = self.font.render(line).solid(text_color) {
-                    if let Ok(texture) = surface.as_texture(texture_creator) {
-                        let query = texture.query();
-                        let bg_rect = Rect::new(1028, y - 2, query.width + 16, query.height + 12);
-                        canvas.set_draw_color(bg_color);
-                        let _ = canvas.fill_rect(bg_rect);
-                        canvas.set_draw_color(border_color);
-                        let _ = canvas.draw_rect(bg_rect);
-                        let dst = Rect::new(1035, y + 4, query.width, query.height);
-                        let _ = canvas.copy(&texture, None, Some(dst));
-                        y += (query.height + 16) as i32;
-                    }
-                }
-            }
-
-            for (msg, msg_type) in &self.messages {
+            for (msg, msg_type) in &self.debug_messages {
                 let (text_color, bg_color, border_color) = Self::colors_for(*msg_type);
 
                 if let Ok(surface) = self.font.render(msg).solid(text_color) {
@@ -131,8 +113,27 @@ impl<'a> Broadcaster<'a> {
                         y += (query.height + 16) as i32;
                     }
                 }
-
-
+            }
+        } else if ui_state.statistic_panel {
+            if ui_state.keybinds_panel {
+                y += 490;
+            }
+            // First draw any live status lines (these are refreshed each frame)
+            for line in &self.status_lines {
+                let (text_color, bg_color, border_color) = Self::colors_for(MessageType::Setting);
+                if let Ok(surface) = self.font.render(line).solid(text_color) {
+                    if let Ok(texture) = surface.as_texture(texture_creator) {
+                        let query = texture.query();
+                        let bg_rect = Rect::new(1025, y - 2, query.width + 16, query.height + 12);
+                        canvas.set_draw_color(bg_color);
+                        let _ = canvas.fill_rect(bg_rect);
+                        canvas.set_draw_color(border_color);
+                        let _ = canvas.draw_rect(bg_rect);
+                        let dst = Rect::new(1032, y + 4, query.width, query.height);
+                        let _ = canvas.copy(&texture, None, Some(dst));
+                        y += (query.height + 16) as i32;
+                    }
+                }
             }
         }
     }
@@ -140,19 +141,5 @@ impl<'a> Broadcaster<'a> {
     /// Set live status lines to be rendered in the debug panel. Overwrites previous lines.
     pub fn set_status_lines(&mut self, lines: Vec<String>) {
         self.status_lines = lines;
-    }
-
-    pub fn text_texture<'b>(
-        &self,
-        texture_creator: &'b TextureCreator<WindowContext>,
-        text: &str,
-        color: Color,
-    ) -> Option<sdl2::render::Texture<'b>> {
-        if let Ok(surface) = self.font.render(text).blended(color) {
-            if let Ok(texture) = surface.as_texture(texture_creator) {
-                return Some(texture);
-            }
-        }
-        None
     }
 }

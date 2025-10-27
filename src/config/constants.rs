@@ -22,27 +22,27 @@ pub const TILE_HEIGHT: u32 = SCREEN_HEIGHT / 20;
 
 pub const VEHICLE_WIDTH: u32 = TILE_WIDTH;
 pub const VEHICLE_HEIGHT: u32 = TILE_HEIGHT;
-pub const SAFE_DISTANCE: u32 = 3 * VEHICLE_WIDTH;
+pub const SAFE_DISTANCE: u32 = 4 * VEHICLE_WIDTH;
 
 // Velocity - Pixels per second
 pub const VELOCITY_ALMOST_STOP: i32 = 30;
 pub const VELOCITY_VERY_SLOW: i32 = 60;
-pub const VELOCITY_SLOW: i32 = 90;
-pub const VELOCITY_NORMAL: i32 = 120;
-pub const VELOCITY_FAST: i32 = 150;
+pub const VELOCITY_SLOW: i32 = 100;
+pub const VELOCITY_NORMAL: i32 = 150;
+pub const VELOCITY_FAST: i32 = 200;
 
 // Hitboxes
-pub const BIG_HITBOX: u32 = 300;
-pub const MEDIUM_HITBOX: u32 = 225;
-pub const SMALL_HITBOX: u32 = 150;
-pub const VERY_SMALL_HITBOX: u32 = 75;
-pub const ALMOST_STOP_HITBOX: u32 = 52;
+pub const BIG_HITBOX: u32 = 400;
+pub const MEDIUM_HITBOX: u32 = 300;
+pub const SMALL_HITBOX: u32 = 225;
+pub const VERY_SMALL_HITBOX: u32 = 100;
+pub const ALMOST_STOP_HITBOX: u32 = 51;
 pub const STOP_HITBOX: u32 = 50;
 
 // Spawn cooldown
 pub const SPAWN_COOLDOWN: u64 = 1200;
 pub const KEY_COOLDOWN: u64 = 400;
-pub const VELOCITY_COOLDOWN: u64 = 1;
+pub const VELOCITY_COOLDOWN: u64 = 20;
 
 // <=============================== Spawn positions ===============================>
 
